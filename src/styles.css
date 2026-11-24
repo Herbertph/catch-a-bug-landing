@@ -40,10 +40,11 @@
 
   /* cave background (FR-7, FR-8) and glass surfaces (FR-9) */
   --bg-art: url('/bg-cave.webp');
-  --bg-overlay: linear-gradient(180deg, rgba(12, 13, 15, .74) 0%, rgba(12, 13, 15, .62) 45%, rgba(12, 13, 15, .82) 100%);
+  --bg-overlay: linear-gradient(180deg, rgba(12, 13, 15, .8) 0%, rgba(12, 13, 15, .78) 45%, rgba(12, 13, 15, .86) 100%);
   --surface-glass: rgba(18, 19, 22, .72);
   --panel-glass: rgba(23, 24, 28, .86);
   --panel-glass-solid: rgba(23, 24, 28, .94);
+  --footer-glass: rgba(12, 13, 15, .97);
   --blur-glass: 8px;
 
   /* spacing and size scale, 8px base with a 4px half step */
@@ -413,7 +414,7 @@ p {
 .cta-note {
   margin: 0;
   font-size: var(--font-xs);
-  color: var(--muted2);
+  color: var(--muted);
 }
 
 /* Conference card */
@@ -987,6 +988,7 @@ p {
 }
 
 .site-footer {
+  background: var(--footer-glass);
   border-top: 1px solid var(--line);
   padding-block: var(--space-5) var(--space-12);
 }
