@@ -1348,6 +1348,7 @@ p {
   font-size: var(--font-xs);
   letter-spacing: .08em;
   color: var(--gold2);
+  white-space: nowrap;
 }
 
 .result-priority {
