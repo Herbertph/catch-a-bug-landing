@@ -122,7 +122,7 @@ async function measure(page) {
 }
 
 for (const [width, height] of VIEWPORTS) {
-  test(`FR-8 (AC-13): every text over the artwork reaches WCAG AA at ${width}x${height}`, async ({ page }) => {
+  test(`TC-121 (AC-13): every text over the artwork reaches WCAG AA at ${width}x${height}`, async ({ page }) => {
     test.setTimeout(120_000);
     await page.setViewportSize({ width, height });
     await page.goto('/');

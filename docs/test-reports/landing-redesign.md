@@ -1,5 +1,15 @@
 # Test report: landing-redesign
 
+## Retest at `0036af0` (2026-11-24)
+
+- Verdict: **PASS**
+- #1 (review blocker): Body text over the cave artwork falls below WCAG AA contrast (FR-8): **verified fixed**. TC-121 (`tests/e2e/contrast.spec.js`, 5 viewports) passes.
+- Build pass, unit 41/41, e2e 88/88, no flaky tests.
+- Correction to the first run below: the first run passed AC-13 on a visual check only and missed #1, which the Reviewer found by pixel measurement. TC-121 now closes that gap.
+- Spec question for the Analyst: the footer is now `rgba(12,13,15,.97)` (`--footer-glass`). FR-9 asks for a translucent footer; .97 is technically translucent but the artwork barely shows. AC-14 does not list the footer, so this is not a defect.
+
+## First run
+
 - Branch: `feature/landing-redesign`, tested at `4f8228f`
 - Spec: `docs/specs/landing-redesign.md`
 - Test cases: `docs/test-cases/landing-redesign.md`

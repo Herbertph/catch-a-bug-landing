@@ -20,7 +20,7 @@ TC-1nn verifies AC-n of this spec.
 | AC-10 | TC-110 (desktop, mobile) | Pass |
 | AC-11 | TC-111 | Pass |
 | AC-12 | TC-112 | Pass |
-| AC-13 | TC-113 (desktop, mobile), TC-120 (manual) | Pass |
+| AC-13 | TC-113 (desktop, mobile), TC-120 (manual), TC-121 | Pass |
 | AC-14 | TC-114 | Pass |
 | AC-15 | TC-115 | Pass |
 | AC-16 | TC-116 | Pass |
@@ -273,12 +273,23 @@ TC-1nn verifies AC-n of this spec.
 - **Automated by:** manual (screenshot review)
 - **Status:** Pass
 
+### TC-121: every text over the artwork reaches WCAG AA, measured from pixels
+- **Acceptance criterion:** AC-13 (FR-8)
+- **Priority:** high
+- **Type:** accessibility
+- **Preconditions:** artwork and fonts loaded, modal closed
+- **Test data:** viewports 390×844, 1280×800, 1920×1080, 320×800, 900×900
+- **Steps:**
+  1. Collect every visible text node outside the header, sticky bar and modal.
+  2. Hide all text, scroll the page in half-viewport steps and screenshot.
+  3. Compare each text color with the brightest and darkest pixel behind it.
+- **Expected result:** at least 4.5:1 (3:1 for large text) for every node; more than 90% of the nodes measured.
+- **Automated by:** `tests/e2e/contrast.spec.js` › `TC-121 (AC-13): every text over the artwork reaches WCAG AA at <w>x<h>`
+- **Status:** Pass (was Fail (#1) at `b05b0b9`, verified fixed at `0036af0`)
+
 ## Not covered
 
-- Numeric contrast of each text over the brightest artwork pixel (FR-8 wording): axe cannot measure text over a
-  background image, and a pixel-sampling script could not be completed in this session (the tool run was blocked).
-  The footer text (`--muted2`, 14px) has the least margin: 4.53:1 on plain `--bg`, so it is the first place to check
-  if the overlay is ever made lighter.
+- Header and mobile sticky bar texts are excluded from TC-121; they sit on near-opaque §5 backgrounds.
 - iOS Safari behavior of the fixed layer and `backdrop-filter` (no WebKit project in Playwright here).
 - Visible banding in the WebP gradients (FR-11) and total page weight (FR-13), judged by eye and by the file size
   (95 KB image + 73 KB HTML, well under 500 KB).
