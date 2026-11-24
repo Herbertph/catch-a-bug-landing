@@ -38,6 +38,14 @@
   --red-line: rgba(255, 107, 94, .45);
   --gold-glow: rgba(201, 162, 39, .1);
 
+  /* cave background (FR-7, FR-8) and glass surfaces (FR-9) */
+  --bg-art: url('/bg-cave.webp');
+  --bg-overlay: linear-gradient(180deg, rgba(12, 13, 15, .74) 0%, rgba(12, 13, 15, .62) 45%, rgba(12, 13, 15, .82) 100%);
+  --surface-glass: rgba(18, 19, 22, .72);
+  --panel-glass: rgba(23, 24, 28, .86);
+  --panel-glass-solid: rgba(23, 24, 28, .94);
+  --blur-glass: 8px;
+
   /* spacing and size scale, 8px base with a 4px half step */
   --space-1: 4px;
   --space-2: 8px;
@@ -122,6 +130,18 @@ body {
   font-size: var(--font-base);
   line-height: var(--leading-body);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Decorative cave artwork: a fixed layer (not background-attachment, which iOS ignores).
+   If the image fails, body keeps --bg. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-overlay), var(--bg-art) center / cover no-repeat;
+  pointer-events: none;
+  transform: translateZ(0);
 }
 
 body.modal-open {
@@ -373,7 +393,7 @@ p {
   width: 100%;
   margin-top: var(--space-5);
   padding: var(--space-5);
-  background: var(--panel);
+  background: var(--panel-glass);
   border: 1px solid var(--line2);
   border-radius: var(--radius-md);
 }
@@ -400,7 +420,7 @@ p {
 
 .conf-card {
   align-self: start;
-  background: var(--panel);
+  background: var(--panel-glass);
   border: 1px solid var(--line2);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -513,7 +533,7 @@ p {
 /* Proof strip */
 
 .proof {
-  background: var(--bg2);
+  background: var(--surface-glass);
   border-bottom: 1px solid var(--line);
 }
 
@@ -593,7 +613,7 @@ p {
   gap: var(--space-5);
   max-width: var(--size-content-wide);
   padding: var(--space-6);
-  background: var(--panel);
+  background: var(--panel-glass);
   border: 1px solid var(--gold);
   border-radius: var(--radius-md);
 }
@@ -627,7 +647,7 @@ p {
 
 .card {
   padding: var(--space-5);
-  background: var(--panel);
+  background: var(--panel-glass);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
 }
@@ -690,7 +710,7 @@ p {
 /* Accordions */
 
 .accordion {
-  background: var(--panel);
+  background: var(--panel-glass);
   border: 1px solid var(--line2);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -873,7 +893,7 @@ p {
   gap: var(--space-6);
   align-items: start;
   padding: var(--space-6);
-  background: var(--panel);
+  background: var(--panel-glass);
   border: 1px solid var(--line2);
   border-radius: var(--radius-md);
 }
@@ -947,7 +967,7 @@ p {
 
 .final-cta {
   padding-block: var(--space-11);
-  background-color: var(--bg2);
+  background-color: var(--surface-glass);
   background-image: radial-gradient(ellipse at 50% 0%, var(--gold-glow), transparent 60%);
   border-top: 1px solid var(--line);
 }
@@ -1463,6 +1483,32 @@ p {
 
   .phone-screen {
     border-radius: 0;
+  }
+}
+
+/* Glass blur where supported; without it the panels fall back to a near-solid fill */
+
+@supports (backdrop-filter: blur(1px)) {
+  .proof,
+  .final-cta,
+  .card,
+  .accordion,
+  .instructor,
+  .diag-box,
+  .cta-box,
+  .conf-card {
+    backdrop-filter: blur(var(--blur-glass));
+  }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .card,
+  .accordion,
+  .instructor,
+  .diag-box,
+  .cta-box,
+  .conf-card {
+    background-color: var(--panel-glass-solid);
   }
 }
 
