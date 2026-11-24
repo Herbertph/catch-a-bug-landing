@@ -21,7 +21,7 @@ const expectEnglishOnly = async (page, where) => {
   }
 };
 
-test('AC-3: no dashes, curly apostrophes, pt-BR words or waitlist wording on the page or any quiz screen', async ({ page }) => {
+test('TC-203 (AC-3): no dashes, curly apostrophes, pt-BR words or waitlist wording on the page or any quiz screen', async ({ page }) => {
   await page.goto('/');
   await expectEnglishOnly(page, 'page');
 
@@ -42,7 +42,7 @@ test('AC-3: no dashes, curly apostrophes, pt-BR words or waitlist wording on the
   }
 });
 
-test('AC-4: every "Take the diagnostic" button opens the quiz on question 1 in English', async ({ page }) => {
+test('TC-204 (AC-4): every "Take the diagnostic" button opens the quiz on question 1 in English', async ({ page }) => {
   await page.goto('/');
   const buttons = page.locator('button[data-open-quiz]');
   await expect(buttons).toHaveText(Array(5).fill('Take the diagnostic'));
@@ -63,7 +63,7 @@ test('AC-4: every "Take the diagnostic" button opens the quiz on question 1 in E
   }
 });
 
-test("AC-5: question 7 reads \"See what's missing\" and leads to the email screen", async ({ page }) => {
+test("TC-205 (AC-5): question 7 reads \"See what's missing\" and leads to the email screen", async ({ page }) => {
   await page.goto('/');
   await openQuiz(page);
   await answerAll(page, Array(6).fill(0));
@@ -73,7 +73,7 @@ test("AC-5: question 7 reads \"See what's missing\" and leads to the email scree
   await expect(page.getByLabel('Your email to see the diagnostic')).toBeVisible();
 });
 
-test('AC-6: an invalid email shows the EN error and a valid one shows the result with no request', async ({ page }) => {
+test('TC-206 (AC-6): an invalid email shows the EN error and a valid one shows the result with no request', async ({ page }) => {
   await page.goto('/');
   await reachEmail(page);
 
@@ -90,7 +90,7 @@ test('AC-6: an invalid email shows the EN error and a valid one shows the result
   expect(requests).toEqual([]);
 });
 
-test('AC-9: answers 2,1,0,2,1,0,2 give score 8 with EBOOK labels and the exact priority list', async ({ page }) => {
+test('TC-209 (AC-9): answers 2,1,0,2,1,0,2 give score 8 with EBOOK labels and the exact priority list', async ({ page }) => {
   await page.goto('/');
   await reachResult(page, [0, 1, 2, 0, 1, 2, 0]);
 
@@ -104,7 +104,7 @@ test('AC-9: answers 2,1,0,2,1,0,2 give score 8 with EBOOK labels and the exact p
   );
 });
 
-test('AC-13: the EN anchors exist, the logo links to #top and the pt-BR anchors are gone', async ({ page }) => {
+test('TC-213 (AC-13): the EN anchors exist, the logo links to #top and the pt-BR anchors are gone', async ({ page }) => {
   await page.goto('/');
   for (const id of ['top', 'diagnostic', 'ebooks']) await expect(page.locator(`#${id}`)).toHaveCount(1);
   for (const id of ['topo', 'diagnostico', 'aulas']) await expect(page.locator(`#${id}`)).toHaveCount(0);

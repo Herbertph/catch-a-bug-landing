@@ -71,7 +71,7 @@ describe('priorityAreas', () => {
 });
 
 describe('formatPriorityList', () => {
-  it('AC-15: formats areas as Ebook NN (Area), comma separated', () => {
+  it('TC-216 (AC-15): formats areas as Ebook NN (Area), comma separated', () => {
     expect(
       formatPriorityList([
         { ebook: '01', area: 'Login and session' },
