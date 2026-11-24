@@ -1,14 +1,14 @@
 import { expect } from '@playwright/test';
 
 export const OPTION_LABELS = [
-  'Sim, já testei isso de verdade',
-  'Testei só o caminho normal, sem erro',
-  'Nunca testei isso',
+  "Yes, I've really tested this",
+  'I only tested the normal path, no errors',
+  "I've never tested this",
 ];
 
 export async function openQuiz(page) {
   await page.locator('button[data-open-quiz]:visible').first().click();
-  await expect(page.getByRole('dialog', { name: 'Diagnóstico rápido, 7 perguntas' })).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Quick diagnostic, 7 questions' })).toBeVisible();
 }
 
 export async function selectOption(page, index) {
@@ -31,24 +31,24 @@ export async function answerAll(page, answers) {
 }
 
 export async function fillEmail(page, value) {
-  await page.getByLabel('Seu e-mail para ver o diagnóstico').fill(value);
+  await page.getByLabel('Your email to see the diagnostic').fill(value);
 }
 
 export async function submitEmail(page, value) {
   await fillEmail(page, value);
-  await page.getByRole('button', { name: 'Ver meu diagnóstico' }).click();
+  await page.getByRole('button', { name: 'Show my diagnostic' }).click();
 }
 
 export async function reachEmail(page, answers = Array(7).fill(0)) {
   await openQuiz(page);
   await answerAll(page, answers);
-  await expect(page.getByLabel('Seu e-mail para ver o diagnóstico')).toBeVisible();
+  await expect(page.getByLabel('Your email to see the diagnostic')).toBeVisible();
 }
 
 export async function reachResult(page, answers = Array(7).fill(0), email = 'ana@site.com') {
   await reachEmail(page, answers);
   await submitEmail(page, email);
-  await expect(page.getByText('SEU DIAGNÓSTICO')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
 }
 
 export async function closeQuiz(page) {

@@ -18,7 +18,7 @@ function el(tag, className, text) {
   return node;
 }
 
-export function createQuiz(root, { onSeeLessons } = {}) {
+export function createQuiz(root, { onSeeEbooks } = {}) {
   const state = {
     step: 'question',
     index: 0,
@@ -70,7 +70,7 @@ export function createQuiz(root, { onSeeLessons } = {}) {
 
     const options = el('div', 'quiz-options');
     options.setAttribute('role', 'group');
-    options.setAttribute('aria-label', 'Respostas');
+    options.setAttribute('aria-label', QUESTIONS_COPY.optionsLabel);
 
     const selectedPoints = state.answers[state.index];
     const buttons = OPTIONS.map((option) => {
@@ -200,7 +200,7 @@ export function createQuiz(root, { onSeeLessons } = {}) {
         box,
         el('span', 'area-name', entry.area),
         el('span', 'area-status', status.label),
-        el('span', 'area-lesson', `AULA ${entry.lesson}`),
+        el('span', 'area-ebook', `${RESULT_COPY.ebookLabel} ${entry.ebook}`),
       );
       list.append(row);
     });
@@ -222,15 +222,15 @@ export function createQuiz(root, { onSeeLessons } = {}) {
     fragment.append(priority);
 
     const actions = el('div', 'result-actions');
-    const lessons = el('button', 'btn btn-gold btn-lg', RESULT_COPY.lessonsButton);
-    lessons.type = 'button';
-    lessons.addEventListener('click', () => {
-      if (onSeeLessons) onSeeLessons();
+    const ebooks = el('button', 'btn btn-gold btn-lg', RESULT_COPY.ebooksButton);
+    ebooks.type = 'button';
+    ebooks.addEventListener('click', () => {
+      if (onSeeEbooks) onSeeEbooks();
     });
     const redo = el('button', 'btn btn-ghost', RESULT_COPY.redoButton);
     redo.type = 'button';
     redo.addEventListener('click', reset);
-    actions.append(lessons, redo);
+    actions.append(ebooks, redo);
     fragment.append(actions, el('p', 'result-note', RESULT_COPY.note));
 
     root.replaceChildren(fragment);

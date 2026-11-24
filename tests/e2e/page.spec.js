@@ -24,8 +24,8 @@ const columns = (page, selector) =>
 test('TC-1 (AC-1): language, title, favicon and viewport meta', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
-  await expect(page).toHaveTitle('Teste Antes de Lançar, o mini curso para SaaS feito com IA');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page).toHaveTitle("Don't Break in Public, the ebook series for AI-built SaaS");
 
   const icon = await page.locator('link[rel="icon"]').getAttribute('href');
   expect(icon).toMatch(/^data:/);
@@ -44,12 +44,12 @@ test('TC-2 (AC-2): sections are in the source order', async ({ page }) => {
   expect(order).toEqual([
     'hero',
     'proof',
-    'diagnostico',
-    'problema',
-    'formato',
-    'aulas',
-    'publico',
-    'instrutor',
+    'diagnostic',
+    'problem',
+    'format',
+    'ebooks',
+    'audience',
+    'instructor',
     'faq',
     'final-cta',
   ]);
@@ -61,184 +61,184 @@ test('TC-2 (AC-2): sections are in the source order', async ({ page }) => {
 test('TC-3 (AC-2): hero, conference card and proof strip copy is exact', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.locator('.hero .pill')).toHaveText('Mini curso, 8 aulas curtas');
-  await expect(page.locator('.hero h1')).toHaveText('Sem esses testes, seu SaaS pode quebrar em produção');
+  await expect(page.locator('.hero .pill')).toHaveText("Don't Break in Public, 7 short ebooks");
+  await expect(page.locator('.hero h1')).toHaveText('Without these tests, your SaaS can break in production');
   await expect(page.locator('.hero-lead').nth(0)).toHaveText(
-    'Você construiu rápido com IA, e isso é ótimo. O problema é que o agente entrega o código e diz que está pronto, mas ninguém conferiu se funciona de verdade. Este mini curso mostra os 7 testes que separam um lançamento tranquilo de um lançamento apagando incêndio.',
+    "You built fast with AI, and that's great. The problem is that the agent hands over the code and says it's done, but nobody checked that it actually works. These ebooks show the 7 tests that separate a calm launch from a launch spent putting out fires.",
   );
   await expect(page.locator('.hero-lead').nth(1)).toHaveText(
-    'Aulas curtas e diretas, feitas para quem programa com agente, Cursor, Claude, Copilot ou qualquer LLM, e quer validar o próprio produto sem virar especialista em QA.',
+    'Short, direct ebooks for people who build with an agent, Cursor, Claude, Copilot or any LLM, and want to validate their own product without becoming a QA expert.',
   );
 
-  await expect(page.locator('.cta-box-title')).toHaveText('Descubra onde seu SaaS pode quebrar');
+  await expect(page.locator('.cta-box-title')).toHaveText('Find out where your SaaS can break');
   await expect(page.locator('.cta-box-text')).toHaveText(
-    'Responda 7 perguntas, uma para cada teste do curso, e veja na tela sua pontuação de 0 a 14, suas áreas descobertas e as aulas prioritárias para o seu caso.',
+    'Answer 7 questions, one for each test in the ebooks, and see your score from 0 to 14, your uncovered areas and the ebooks to read first for your case.',
   );
   await expect(page.locator('.cta-note')).toHaveText(
-    'Leva cerca de 1 minuto. O resultado aparece na tela, com o status de cada área.',
+    'It takes about 1 minute. Your result appears on screen, with the status of each area.',
   );
 
   const card = page.locator('.conf-card');
-  await expect(card).toHaveAttribute('aria-label', 'Exemplo de conferência de testes antes do lançamento');
-  await expect(page.locator('.conf-label')).toHaveText('CONFERÊNCIA PRÉ-LANÇAMENTO');
-  await expect(page.locator('.conf-badge')).toHaveText('AO VIVO NA AULA');
+  await expect(card).toHaveAttribute('aria-label', 'Example of a pre-launch test check');
+  await expect(page.locator('.conf-label')).toHaveText('PRE-LAUNCH CHECK');
+  await expect(page.locator('.conf-badge')).toHaveText('STRAIGHT FROM THE EBOOKS');
 
   await expect(page.locator('.conf-row .conf-text strong')).toHaveText([
-    'Login e sessão',
-    'Pagamento e checkout',
-    'Salvamento de dados',
-    'Permissões de acesso',
-    'Fluxo principal ponta a ponta',
+    'Login and session',
+    'Payment and checkout',
+    'Saving data',
+    'Access permissions',
+    'Main flow, end to end',
   ]);
   await expect(page.locator('.conf-row .conf-text')).toHaveText([
-    'Login e sessãoUsuário entra, sai e volta sem perder o acesso',
-    'Pagamento e checkoutCartão recusado ainda cobra o cliente, bug clássico de SaaS novo',
-    'Salvamento de dadosO que o usuário salva continua lá depois de atualizar a página',
-    'Permissões de acessoUm cliente consegue ver dados de outro cliente',
-    'Fluxo principal ponta a pontaCadastro, uso e pagamento, na ordem em que o cliente faz',
+    'Login and sessionUsers sign in, sign out and come back without losing access',
+    'Payment and checkoutA declined card still charges the customer, a classic new SaaS bug',
+    'Saving dataWhat the user saves is still there after a page refresh',
+    "Access permissionsOne customer can see another customer's data",
+    'Main flow, end to endSign up, use and payment, in the order the customer does them',
   ]);
   await expect(page.locator('.conf-foot')).toHaveText(
-    '2 falhas encontradas antes do lançamento CUSTO: R$ 0 em cliente perdido',
+    '2 failures found before launch COST: $0 in lost customers',
   );
 
-  await expect(page.locator('.proof-num')).toHaveText(['10+', '3 dias → 24h', '98%', 'CTFL 2026']);
+  await expect(page.locator('.proof-num')).toHaveText(['10+ years', '3 days → 24h', '98%', 'CTFL 2026']);
   await expect(page.locator('.proof-text')).toHaveText([
-    'anos de experiência em TI, de desenvolvimento a qualidade de software',
-    'foi a redução no tempo de triagem de bugs, com processo e bug report padronizado',
-    'no prazo das entregas nos últimos 6 meses, verificando software que não pode ir ao ar com erro',
-    'certificação internacional em testes de software, ISTQB',
+    'in IT, from development to software quality',
+    'was the cut in bug triage time, with a standardized process and bug reports',
+    'on-time deliveries over the last 6 months, verifying software that cannot ship with errors',
+    'international software testing certification, ISTQB',
   ]);
 });
 
 test('TC-4 (AC-2): section headings, leads and instructor card copy are exact', async ({ page }) => {
   await page.goto('/');
 
-  const diagnostico = page.locator('[data-section="diagnostico"]');
-  await expect(diagnostico.locator('.eyebrow')).toHaveText('Diagnóstico rápido');
-  await expect(diagnostico.locator('h2')).toHaveText('Descubra, em 1 minuto, onde seu SaaS pode quebrar');
-  await expect(diagnostico.locator('.section-lead')).toHaveText(
-    '7 perguntas, uma para cada teste do curso. No final, você deixa seu e-mail e recebe na tela sua pontuação, suas áreas descobertas e quais aulas atacam exatamente o seu risco.',
+  const diagnostic = page.locator('[data-section="diagnostic"]');
+  await expect(diagnostic.locator('.eyebrow')).toHaveText('Quick diagnostic');
+  await expect(diagnostic.locator('h2')).toHaveText('Find out, in 1 minute, where your SaaS can break');
+  await expect(diagnostic.locator('.section-lead')).toHaveText(
+    '7 questions, one for each test in the ebooks. At the end, you leave your email and see on screen your score, your uncovered areas and which ebooks tackle exactly your risk.',
   );
-  await expect(diagnostico.locator('.diag-copy h3')).toHaveText('Seu SaaS está pronto para o primeiro cliente de verdade?');
-  await expect(diagnostico.locator('.diag-copy p')).toHaveText(
-    'O diagnóstico abre aqui na página, em uma janelinha no formato de celular. Você responde as 7 perguntas, deixa seu e-mail e vê o resultado completo sem sair desta tela.',
+  await expect(diagnostic.locator('.diag-copy h3')).toHaveText('Is your SaaS ready for its first real customer?');
+  await expect(diagnostic.locator('.diag-copy p')).toHaveText(
+    'The diagnostic opens right here, in a small phone-shaped window. You answer the 7 questions, leave your email and see the full result without leaving this page.',
   );
 
-  const problema = page.locator('[data-section="problema"]');
-  await expect(problema.locator('h2')).toHaveText('Vibe coding acelerou a construção. A conferência ficou para trás.');
-  await expect(problema.locator('.tag')).toHaveText(['SEM TESTE', 'COM OS 7 TESTES']);
-  await expect(problema.locator('.card h3')).toHaveText(['Quem descobre o bug é o cliente', 'Quem descobre o bug é você, antes']);
+  const problem = page.locator('[data-section="problem"]');
+  await expect(problem.locator('h2')).toHaveText('Vibe coding sped up building. Checking fell behind.');
+  await expect(problem.locator('.tag')).toHaveText(['WITHOUT TESTING', 'WITH THE 7 TESTS']);
+  await expect(problem.locator('.card h3')).toHaveText(['Your customer finds the bug', 'You find the bug, first']);
 
-  const formato = page.locator('[data-section="formato"]');
-  await expect(formato.locator('h2')).toHaveText('Não é teoria de QA. É um roteiro de trabalho.');
-  await expect(formato.locator('.step-num')).toHaveText(['PASSO 1', 'PASSO 2', 'PASSO 3', 'PASSO 4']);
-  await expect(formato.locator('.card h3')).toHaveText([
-    'Onde você está tocando',
-    'Por que testar isso',
-    'O prompt pronto',
-    'A conferência manual',
+  const format = page.locator('[data-section="format"]');
+  await expect(format.locator('h2')).toHaveText('Not QA theory. A working playbook.');
+  await expect(format.locator('.step-num')).toHaveText(['STEP 1', 'STEP 2', 'STEP 3', 'STEP 4']);
+  await expect(format.locator('.card h3')).toHaveText([
+    "Where you're working",
+    'Why test it',
+    'The ready-made prompt',
+    'The manual check',
   ]);
 
-  const aulas = page.locator('[data-section="aulas"]');
-  await expect(aulas.locator('h2')).toHaveText('8 aulas, uma introdução e os 7 testes');
-  await expect(aulas.locator('.course-foot')).toHaveText(
-    '8 aulas, introdução mais os 7 testes Em cada aula, o prompt pronto e a conferência manual Feito para quem constrói com IA, sem base em QA',
+  const ebooks = page.locator('[data-section="ebooks"]');
+  await expect(ebooks.locator('h2')).toHaveText('7 ebooks, one for each test');
+  await expect(ebooks.locator('.ebook-foot')).toHaveText(
+    '7 ebooks, one for each test In every ebook, the ready-made prompt and the manual check Made for people who build with AI, no QA background needed',
   );
 
-  const publico = page.locator('[data-section="publico"]');
-  await expect(publico.locator('h2')).toHaveText('Feito para founder que constrói, não para quem estuda QA');
-  await expect(publico.locator('.card h3')).toHaveText(['Este curso é para você se', 'Não é para você se']);
+  const audience = page.locator('[data-section="audience"]');
+  await expect(audience.locator('h2')).toHaveText('Made for founders who build, not for people studying QA');
+  await expect(audience.locator('.card h3')).toHaveText(['These ebooks are for you if', "They're not for you if"]);
 
-  const instrutor = page.locator('[data-section="instrutor"]');
-  await expect(instrutor.locator('h2')).toHaveText('Autoridade de verdade, sem número inventado');
-  await expect(instrutor.locator('.instructor-name')).toHaveText('Herbert Parasio');
-  await expect(instrutor.locator('.instructor-role')).toHaveText('SQA Team Lead, BMM Test Labs, Canadá');
-  await expect(instrutor.locator('.instructor-list li')).toHaveCount(5);
-  await expect(instrutor.locator('blockquote')).toHaveText(
-    'Eu não tenho coragem de inventar número para parecer autoridade. O que eu tenho é o trabalho, e é ele que está nestas aulas.',
+  const instructor = page.locator('[data-section="instructor"]');
+  await expect(instructor.locator('h2')).toHaveText('Real authority, no made-up numbers');
+  await expect(instructor.locator('.instructor-name')).toHaveText('Herbert Parasio');
+  await expect(instructor.locator('.instructor-role')).toHaveText('SQA Team Lead, BMM Test Labs, Canada');
+  await expect(instructor.locator('.instructor-list li')).toHaveCount(5);
+  await expect(instructor.locator('blockquote')).toHaveText(
+    "I won't make up numbers to look like an authority. What I have is the work, and that's what's in these ebooks.",
   );
 
   const faq = page.locator('[data-section="faq"]');
-  await expect(faq.locator('h2')).toHaveText('Tire suas dúvidas');
+  await expect(faq.locator('h2')).toHaveText('Your questions, answered');
 
   const finalCta = page.locator('[data-section="final-cta"]');
-  await expect(finalCta.locator('h2')).toHaveText('Seu próximo lançamento não precisa ser uma aposta');
+  await expect(finalCta.locator('h2')).toHaveText("Your next launch doesn't have to be a bet");
   await expect(finalCta.locator('p:not(.eyebrow)')).toHaveText(
-    'Faça o diagnóstico, 7 perguntas em cerca de 1 minuto, e veja sua pontuação, suas áreas descobertas e as aulas que atacam exatamente o seu risco. Melhor você encontrar o bug agora do que o seu primeiro cliente encontrar por você.',
+    'Take the diagnostic, 7 questions in about 1 minute, and see your score, your uncovered areas and the ebooks that tackle exactly your risk. Better you find the bug now than your first customer finds it for you.',
   );
 
   await expect(page.locator('.footer-inner p')).toHaveText([
     'UNFLAKY, Quality Lab, Herbert Parasio',
-    'Mini curso em produção. Conteúdo baseado em experiência real de QA, sem resultados financeiros prometidos ou inventados.',
+    'Ebook series in production. Content based on real QA experience, with no financial results promised or invented.',
   ]);
 });
 
 test('TC-5 (AC-2): card, step, audience, instructor and FAQ copy is exact', async ({ page }) => {
   await page.goto('/');
 
-  const problema = page.locator('[data-section="problema"]');
-  await expect(problema.locator('.eyebrow')).toHaveText('O problema');
-  await expect(problema.locator('.section-lead')).toHaveText(
-    'Hoje qualquer founder monta um SaaS em semanas. Só que velocidade sem teste cria um tipo novo de bug, o bug que ninguém viu porque ninguém procurou.',
+  const problem = page.locator('[data-section="problem"]');
+  await expect(problem.locator('.eyebrow')).toHaveText('The problem');
+  await expect(problem.locator('.section-lead')).toHaveText(
+    'Today any founder can put a SaaS together in weeks. But speed without testing creates a new kind of bug, the bug nobody saw because nobody looked.',
   );
-  await expect(problema.locator('.card > p:not(.tag)')).toHaveText([
-    'O agente diz que terminou, você publica, e o primeiro pagamento real falha, o primeiro cliente perde os dados que salvou, ou pior, enxerga os dados de outro cliente. A correção vem depois do estrago, com pressa e com o cliente já desconfiando do produto.',
-    'Você roda uma conferência curta e metódica nas áreas que realmente quebram um SaaS. Cada falha aparece na sua tela, em ambiente de teste, com tempo de pedir a correção para o agente e conferir de novo. Lançar vira uma decisão, não uma aposta.',
+  await expect(problem.locator('.card > p:not(.tag)')).toHaveText([
+    "The agent says it's done, you publish, and the first real payment fails, the first customer loses the data they saved, or worse, sees another customer's data. The fix comes after the damage, in a hurry, with the customer already doubting the product.",
+    'You run a short, methodical check on the areas that really break a SaaS. Every failure shows up on your screen, in a test environment, with time to ask the agent for a fix and check again. Launching becomes a decision, not a bet.',
   ]);
 
-  const formato = page.locator('[data-section="formato"]');
-  await expect(formato.locator('.eyebrow')).toHaveText('O formato de cada aula');
-  await expect(formato.locator('.section-lead')).toHaveText(
-    'Cada um dos 7 testes segue o mesmo formato, para você aplicar no seu produto no mesmo dia, mesmo sem escrever código na mão.',
+  const format = page.locator('[data-section="format"]');
+  await expect(format.locator('.eyebrow')).toHaveText('How each ebook works');
+  await expect(format.locator('.section-lead')).toHaveText(
+    'Each of the 7 ebooks follows the same format, so you can apply it to your product the same day, even without writing code by hand.',
   );
-  await expect(formato.locator('.card-step > p:not(.step-num)')).toHaveText([
-    'Qual área do seu SaaS aquele teste cobre, pagamento, login, dados, permissões, e onde o risco mora nela.',
-    'O que quebra se essa área falhar, traduzido para a linguagem do founder, venda perdida, dado perdido, cliente perdido.',
-    'Um prompt completo para colar no seu agente e pedir a implementação ou a correção do teste, sem você precisar saber programá-lo.',
-    'O passo a passo curto, na tela, para você mesmo confirmar se funcionou. Porque o agente diz que fez, mas quem valida é você.',
+  await expect(format.locator('.card-step > p:not(.step-num)')).toHaveText([
+    'Which area of your SaaS the test covers, payment, login, data, permissions, and where the risk lives in it.',
+    'What breaks if this area fails, in founder terms, a lost sale, lost data, a lost customer.',
+    'A complete prompt to paste into your agent and ask it to implement or fix the test, without you needing to know how to code it.',
+    "A short step by step, on screen, so you can confirm yourself that it worked. Because the agent says it did it, but you're the one who validates it.",
   ]);
 
-  const aulas = page.locator('[data-section="aulas"]');
-  await expect(aulas.locator('.eyebrow')).toHaveText('Conteúdo do curso');
-  await expect(aulas.locator('.section-lead')).toHaveText(
-    'Toque em cada aula para ver o que ela cobre. Aulas curtas, sem enrolação, cada uma termina com a conferência feita no seu próprio produto.',
+  const ebooks = page.locator('[data-section="ebooks"]');
+  await expect(ebooks.locator('.eyebrow')).toHaveText('The ebooks');
+  await expect(ebooks.locator('.section-lead')).toHaveText(
+    'Tap an ebook to see what it covers. Short, no fluff, and each one ends with the check done on your own product.',
   );
 
-  const publico = page.locator('[data-section="publico"]');
-  await expect(publico.locator('.eyebrow')).toHaveText('Para quem é');
-  await expect(publico.locator('.card-yes .check-list li')).toHaveText([
-    'Você está criando um SaaS com IA, vibe coding ou agente de código',
-    'Você vai lançar, ou já lançou, sem ninguém testando além de você',
-    'Seu maior medo é quebrar em produção na frente dos primeiros clientes',
-    'Você quer um método curto de conferência, para repetir em todo lançamento',
+  const audience = page.locator('[data-section="audience"]');
+  await expect(audience.locator('.eyebrow')).toHaveText("Who it's for");
+  await expect(audience.locator('.card-yes .check-list li')).toHaveText([
+    "You're building a SaaS with AI, vibe coding or a coding agent",
+    "You're going to launch, or already have, with nobody testing but you",
+    'Your biggest fear is breaking in production in front of your first customers',
+    'You want a short checking method to repeat on every launch',
   ]);
-  await expect(publico.locator('.card-no .check-list li')).toHaveText([
-    'Você quer uma formação completa em QA ou preparação para certificação',
-    'Você procura automação avançada de testes e frameworks de código',
-    'Seu produto já tem uma equipe de qualidade dedicada',
-    'Você quer promessa de resultado financeiro, aqui não tem nenhuma',
+  await expect(audience.locator('.card-no .check-list li')).toHaveText([
+    'You want a complete QA education or certification prep',
+    "You're looking for advanced test automation and code frameworks",
+    'Your product already has a dedicated quality team',
+    "You want a promise of financial results, there's none here",
   ]);
 
-  const instrutor = page.locator('[data-section="instrutor"]');
-  await expect(instrutor.locator('.eyebrow')).toHaveText('Quem ensina');
-  await expect(instrutor.locator('.section-lead')).toHaveText(
-    'Você vai ver por aí curso vendido com print de faturamento e promessa de resultado. Aqui a credibilidade é outra, é trabalho real, verificável, feito todos os dias.',
+  const instructor = page.locator('[data-section="instructor"]');
+  await expect(instructor.locator('.eyebrow')).toHaveText('Who wrote it');
+  await expect(instructor.locator('.section-lead')).toHaveText(
+    "You'll see products out there sold with revenue screenshots and promises of results. Here the credibility is different, it's real work, verifiable, done every day.",
   );
-  await expect(instrutor.locator('.instructor-list li')).toHaveText([
-    'Team Lead de QA em laboratório de testes no Canadá, com software que não pode ir ao ar com erro',
-    '95% de aprovação na primeira verificação dos produtos testados nos últimos 6 meses',
-    'Reduziu uma triagem de bugs de 3 dias para menos de 24 horas',
-    'Certificado CTFL, ISTQB, em 2026',
-    'Mais de 10 anos em TI, de desenvolvedor full stack a líder de QA',
+  await expect(instructor.locator('.instructor-list li')).toHaveText([
+    'QA Team Lead at a testing lab in Canada, on software that cannot ship with errors',
+    '95% pass rate on the first verification of the products tested over the last 6 months',
+    'Cut a bug triage from 3 days to under 24 hours',
+    'CTFL certified, ISTQB, 2026',
+    'More than 10 years in IT, from full stack developer to QA lead',
   ]);
-  await expect(instrutor.locator('.instructor-text p')).toHaveText([
-    'Eu trabalho testando software que não pode ir ao ar com erro. No laboratório onde lidero a área de QA, cada produto passa por uma verificação rigorosa antes de qualquer liberação, e cada problema encontrado volta para quem desenvolveu corrigir, com o processo rodando até ficar certo.',
-    'É esse olhar que falta no SaaS feito com IA. Não é falta de código, o agente entrega código o dia inteiro. É falta de alguém conferindo o que importa, na ordem certa, antes do cliente. Foi exatamente esse método, simplificado para quem não é de QA, que virou as 7 aulas deste curso.',
-    'Nada aqui é teoria de livro. É o mesmo raciocínio de priorização e conferência que eu uso no trabalho, traduzido para a realidade de quem constrói sozinho, com agente, e precisa lançar sem medo.',
+  await expect(instructor.locator('.instructor-text p')).toHaveText([
+    "I work testing software that cannot ship with errors. At the lab where I lead QA, every product goes through a rigorous verification before any release, and every problem found goes back to the people who built it to fix, with the process running until it's right.",
+    "That's the eye missing from SaaS built with AI. It's not a lack of code, the agent ships code all day long. It's a lack of someone checking what matters, in the right order, before the customer does. That method, simplified for people who aren't in QA, is exactly what became these 7 ebooks.",
+    "None of this is textbook theory. It's the same prioritizing and checking mindset I use at work, translated for people who build alone, with an agent, and need to launch without fear.",
   ]);
 
-  await expect(page.locator('[data-section="faq"] .eyebrow')).toHaveText('Perguntas frequentes');
-  await expect(page.locator('.final-cta .eyebrow')).toHaveText('Diagnóstico rápido');
+  await expect(page.locator('[data-section="faq"] .eyebrow')).toHaveText('FAQ');
+  await expect(page.locator('.final-cta .eyebrow')).toHaveText('Quick diagnostic');
 });
 
 test('TC-6 (AC-3): no em dash or en dash in the rendered page, attributes or quiz screens', async ({ page }) => {
@@ -253,9 +253,9 @@ test('TC-6 (AC-3): no em dash or en dash in the rendered page, attributes or qui
     await page.locator('.quiz-option').first().click();
     await page.locator('.quiz-next').click();
   }
-  await page.getByLabel('Seu e-mail para ver o diagnóstico').fill('ana@site.com');
-  await page.getByRole('button', { name: 'Ver meu diagnóstico' }).click();
-  await expect(page.getByText('SEU DIAGNÓSTICO')).toBeVisible();
+  await page.getByLabel('Your email to see the diagnostic').fill('ana@site.com');
+  await page.getByRole('button', { name: 'Show my diagnostic' }).click();
+  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
   const resultHtml = await page.evaluate(() => document.documentElement.outerHTML);
   expect(resultHtml).not.toMatch(/[\u2013\u2014]/);
 });
@@ -263,7 +263,7 @@ test('TC-6 (AC-3): no em dash or en dash in the rendered page, attributes or qui
 test('TC-7 (AC-4): no waitlist wording, no e-mail field and no form outside the quiz modal', async ({ page }) => {
   await page.goto('/');
   const body = await page.locator('body').innerText();
-  for (const wording of ['lista de espera', 'avise-me', 'garanta sua vaga', 'entrar na lista']) {
+  for (const wording of ['waitlist', 'wait list', 'notify me', 'join the list', 'reserve your spot', 'early access']) {
     expect(body.toLowerCase()).not.toContain(wording);
   }
 
@@ -297,7 +297,7 @@ test('TC-9 (AC-6): the shield SVG sits complete inside the header logo box', asy
   await page.goto('/');
 
   const logo = page.locator('.logo');
-  await expect(logo).toHaveAttribute('href', '#topo');
+  await expect(logo).toHaveAttribute('href', '#top');
   await expect(logo).toHaveAttribute('aria-label', 'Unflaky, Quality Lab');
   await expect(page.locator('.logo-name')).toHaveText('UNFLAKY');
   await expect(page.locator('.logo-sub')).toHaveText('QUALITY LAB');
@@ -350,24 +350,24 @@ test('TC-55 (AC-37): no horizontal overflow and the layout breaks at 900px and 6
   await page.setViewportSize({ width: 901, height: 800 });
   expect(await columns(page, '.hero-grid')).toBe(2);
   expect(await columns(page, '.proof-grid')).toBe(4);
-  expect(await columns(page, '[data-section="formato"] .grid-4')).toBe(4);
+  expect(await columns(page, '[data-section="format"] .grid-4')).toBe(4);
   expect(await columns(page, '.instructor')).toBe(2);
 
   await page.setViewportSize({ width: 900, height: 800 });
   expect(await columns(page, '.hero-grid')).toBe(1);
   expect(await columns(page, '.proof-grid')).toBe(2);
-  expect(await columns(page, '[data-section="formato"] .grid-4')).toBe(2);
+  expect(await columns(page, '[data-section="format"] .grid-4')).toBe(2);
   expect(await columns(page, '.instructor')).toBe(1);
-  expect(await columns(page, '[data-section="problema"] .grid-2')).toBe(2);
+  expect(await columns(page, '[data-section="problem"] .grid-2')).toBe(2);
 
   await page.setViewportSize({ width: 621, height: 800 });
-  expect(await columns(page, '[data-section="problema"] .grid-2')).toBe(2);
-  expect(await columns(page, '[data-section="publico"] .grid-2')).toBe(2);
+  expect(await columns(page, '[data-section="problem"] .grid-2')).toBe(2);
+  expect(await columns(page, '[data-section="audience"] .grid-2')).toBe(2);
 
   await page.setViewportSize({ width: 620, height: 800 });
-  expect(await columns(page, '[data-section="problema"] .grid-2')).toBe(1);
-  expect(await columns(page, '[data-section="publico"] .grid-2')).toBe(1);
-  expect(await columns(page, '[data-section="formato"] .grid-4')).toBe(1);
+  expect(await columns(page, '[data-section="problem"] .grid-2')).toBe(1);
+  expect(await columns(page, '[data-section="audience"] .grid-2')).toBe(1);
+  expect(await columns(page, '[data-section="format"] .grid-4')).toBe(1);
 });
 
 test('TC-56 (AC-38): reduced motion turns smooth scrolling and the plus rotation off', async ({ page }) => {
@@ -403,9 +403,9 @@ test('TC-61 (AC-41): computed padding, margin and gap values belong to the spaci
     await page.locator('.quiz-option').first().click();
     await page.locator('.quiz-next').click();
   }
-  await page.getByLabel('Seu e-mail para ver o diagnóstico').fill('ana@site.com');
-  await page.getByRole('button', { name: 'Ver meu diagnóstico' }).click();
-  await expect(page.getByText('SEU DIAGNÓSTICO')).toBeVisible();
+  await page.getByLabel('Your email to see the diagnostic').fill('ana@site.com');
+  await page.getByRole('button', { name: 'Show my diagnostic' }).click();
+  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
 
   const samples = await page.evaluate(() => {
     const selectors = [

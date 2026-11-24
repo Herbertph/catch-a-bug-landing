@@ -24,11 +24,11 @@ export function statusFor(points) {
 export function priorityAreas(answers) {
   return AREAS.map((entry, index) => ({ ...entry, points: answers[index] }))
     .filter((entry) => (typeof entry.points === 'number' ? entry.points : 0) < 2)
-    .map(({ lesson, area }) => ({ lesson, area }));
+    .map(({ ebook, area }) => ({ ebook, area }));
 }
 
 export function formatPriorityList(areas) {
-  return areas.map(({ lesson, area }) => `Aula ${lesson} (${area})`).join(', ');
+  return areas.map(({ ebook, area }) => `Ebook ${ebook} (${area})`).join(', ');
 }
 
 export function isValidEmail(value) {

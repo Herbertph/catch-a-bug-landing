@@ -33,12 +33,12 @@ describe('pointsFor', () => {
 
 describe('bandFor', () => {
   it.each([
-    [0, 'Lançamento em risco'],
-    [4, 'Lançamento em risco'],
-    [5, 'Base parcial, buracos abertos'],
-    [9, 'Base parcial, buracos abertos'],
-    [10, 'Quase pronto, feche as lacunas'],
-    [14, 'Quase pronto, feche as lacunas'],
+    [0, 'Launch at risk'],
+    [4, 'Launch at risk'],
+    [5, 'Partial base, open gaps'],
+    [9, 'Partial base, open gaps'],
+    [10, 'Almost ready, close the gaps'],
+    [14, 'Almost ready, close the gaps'],
   ])('score %i belongs to "%s"', (score, title) => {
     expect(bandFor(score).title).toBe(title);
   });
@@ -46,9 +46,9 @@ describe('bandFor', () => {
 
 describe('statusFor', () => {
   it('maps 2, 1 and 0 points to the three statuses', () => {
-    expect(statusFor(2)).toEqual({ label: 'conferido', icon: 'check' });
-    expect(statusFor(1)).toEqual({ label: 'parcial', icon: 'dot' });
-    expect(statusFor(0)).toEqual({ label: 'descoberto', icon: 'x' });
+    expect(statusFor(2)).toEqual({ label: 'checked', icon: 'check' });
+    expect(statusFor(1)).toEqual({ label: 'partial', icon: 'dot' });
+    expect(statusFor(0)).toEqual({ label: 'uncovered', icon: 'x' });
   });
 });
 
@@ -57,27 +57,27 @@ describe('priorityAreas', () => {
     expect(priorityAreas(all(2))).toEqual([]);
   });
 
-  it('lists every area below 2 points in lesson order', () => {
+  it('lists every area below 2 points in ebook order', () => {
     const areas = priorityAreas(all(0));
     expect(areas).toHaveLength(7);
-    expect(areas[0]).toEqual({ lesson: '01', area: 'Login e sessão' });
-    expect(areas[6]).toEqual({ lesson: '07', area: 'Mobile e navegadores' });
+    expect(areas[0]).toEqual({ ebook: '01', area: 'Login and session' });
+    expect(areas[6]).toEqual({ ebook: '07', area: 'Mobile and browsers' });
   });
 
   it('includes partial answers and keeps question order', () => {
     const areas = priorityAreas([2, 1, 0, 2, 1, 0, 2]);
-    expect(areas.map((item) => item.lesson)).toEqual(['02', '03', '05', '06']);
+    expect(areas.map((item) => item.ebook)).toEqual(['02', '03', '05', '06']);
   });
 });
 
 describe('formatPriorityList', () => {
-  it('formats areas as Aula NN (Área), comma separated', () => {
+  it('TC-216 (AC-15): formats areas as Ebook NN (Area), comma separated', () => {
     expect(
       formatPriorityList([
-        { lesson: '01', area: 'Login e sessão' },
-        { lesson: '02', area: 'Pagamento e checkout' },
+        { ebook: '01', area: 'Login and session' },
+        { ebook: '02', area: 'Payment and checkout' },
       ]),
-    ).toBe('Aula 01 (Login e sessão), Aula 02 (Pagamento e checkout)');
+    ).toBe('Ebook 01 (Login and session), Ebook 02 (Payment and checkout)');
   });
 
   it('returns an empty string for no areas', () => {

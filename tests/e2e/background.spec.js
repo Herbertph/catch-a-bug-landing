@@ -98,7 +98,7 @@ test('TC-111 (AC-11): without the artwork the page falls back to --bg and the qu
   await openQuiz(page);
   await answerAll(page, Array(7).fill(0));
   await submitEmail(page, 'ana@site.com');
-  await expect(page.getByText('SEU DIAGNÓSTICO')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
   expect(errors).toEqual([]);
 });
 

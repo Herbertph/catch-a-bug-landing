@@ -572,7 +572,7 @@ p {
   padding-block: 0 var(--space-10);
 }
 
-.section-diagnostico {
+.section-diagnostic {
   padding-block: var(--space-10);
 }
 
@@ -828,7 +828,7 @@ p {
   font-size: var(--font-base);
 }
 
-.course-foot {
+.ebook-foot {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-5);
@@ -839,7 +839,7 @@ p {
   color: var(--muted);
 }
 
-.course-foot strong {
+.ebook-foot strong {
   color: var(--text);
 }
 
@@ -1342,12 +1342,13 @@ p {
   color: var(--muted);
 }
 
-.area-lesson {
+.area-ebook {
   margin-left: auto;
   font-family: 'IBM Plex Mono', monospace;
   font-size: var(--font-xs);
   letter-spacing: .08em;
   color: var(--gold2);
+  white-space: nowrap;
 }
 
 .result-priority {
@@ -1439,7 +1440,7 @@ p {
     padding-block: 0 var(--space-8);
   }
 
-  .section-diagnostico {
+  .section-diagnostic {
     padding-block: var(--space-8);
   }
 

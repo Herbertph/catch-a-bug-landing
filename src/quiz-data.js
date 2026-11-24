@@ -1,60 +1,60 @@
-// Single source for every quiz string and every quiz number (spec §14 to §18).
+// Single source for every quiz string and every quiz number (copy: landing-copy-en.md EN-§13 to §18).
 
 export const OPTIONS = [
-  { label: 'Sim, já testei isso de verdade', points: 2 },
-  { label: 'Testei só o caminho normal, sem erro', points: 1 },
-  { label: 'Nunca testei isso', points: 0 },
+  { label: "Yes, I've really tested this", points: 2 },
+  { label: 'I only tested the normal path, no errors', points: 1 },
+  { label: "I've never tested this", points: 0 },
 ];
 
 export const AREAS = [
   {
-    area: 'Login e sessão',
-    lesson: '01',
+    area: 'Login and session',
+    ebook: '01',
     question:
-      'Você já testou o que acontece quando o usuário erra a senha, pede para recuperar a conta ou fica com a sessão expirada?',
-    hint: 'Não vale só o login feliz, o problema mora no erro e na volta.',
+      'Have you tested what happens when a user types the wrong password, asks to recover their account or has their session expire?',
+    hint: "The happy login doesn't count, the trouble lives in the errors and the way back.",
   },
   {
-    area: 'Pagamento e checkout',
-    lesson: '02',
+    area: 'Payment and checkout',
+    ebook: '02',
     question:
-      'Você já simulou um cartão recusado no seu checkout para ver o que acontece com a cobrança e com o acesso do cliente?',
-    hint: 'Pagamento que falha é onde SaaS novo mais cobra errado ou libera sem pagar.',
+      "Have you simulated a declined card in your checkout to see what happens to the charge and to the customer's access?",
+    hint: 'A failed payment is where new SaaS most often charges wrong or gives access without payment.',
   },
   {
-    area: 'Salvamento e perda de dados',
-    lesson: '03',
+    area: 'Saving and data loss',
+    ebook: '03',
     question:
-      'Depois de salvar algo no seu SaaS, você já atualizou a página, fechou tudo e voltou para conferir se continuou lá?',
-    hint: 'Dado que some sem aviso é o bug que o cliente menos perdoa.',
+      'After saving something in your SaaS, have you refreshed the page, closed everything and come back to check it was still there?',
+    hint: 'Data that disappears without warning is the bug customers forgive the least.',
   },
   {
-    area: 'Permissões e acesso',
-    lesson: '04',
+    area: 'Permissions and access',
+    ebook: '04',
     question:
-      'Você já tentou acessar dados de outra conta, trocando o endereço da página ou entrando como usuário comum em área restrita?',
-    hint: 'O vazamento mais comum não é invasão, é permissão que ninguém testou.',
+      "Have you tried to reach another account's data, by changing the page address or by signing in as a regular user to a restricted area?",
+    hint: "The most common leak isn't a hack, it's a permission nobody tested.",
   },
   {
-    area: 'Fluxo principal ponta a ponta',
-    lesson: '05',
+    area: 'Main flow, end to end',
+    ebook: '05',
     question:
-      'Você já fez a jornada completa como um cliente novo, cadastro, primeiro uso e pagamento, sem pular nenhuma etapa?',
-    hint: 'Testar tela por tela esconde o bug que mora entre as telas.',
+      'Have you gone through the full journey as a new customer, sign up, first use and payment, without skipping a step?',
+    hint: 'Testing screen by screen hides the bug that lives between the screens.',
   },
   {
-    area: 'Erros e casos limite',
-    lesson: '06',
+    area: 'Errors and edge cases',
+    ebook: '06',
     question:
-      'Você já enviou formulários vazios, clicou duas vezes no botão de pagar ou simulou a internet caindo no meio de um envio?',
-    hint: 'Seu usuário vai fazer tudo isso, a pergunta é como seu SaaS responde.',
+      'Have you submitted empty forms, double clicked the pay button or simulated the internet dropping in the middle of a submit?',
+    hint: 'Your users will do all of this, the question is how your SaaS responds.',
   },
   {
-    area: 'Mobile e navegadores',
-    lesson: '07',
+    area: 'Mobile and browsers',
+    ebook: '07',
     question:
-      'Você já abriu seu SaaS no celular e em um navegador diferente do seu para conferir se funciona do mesmo jeito?',
-    hint: 'Seu cliente não usa o seu computador, nem o seu navegador, nem a sua internet.',
+      'Have you opened your SaaS on a phone and in a browser other than yours to check it works the same way?',
+    hint: "Your customer doesn't use your computer, your browser or your internet connection.",
   },
 ];
 
@@ -62,59 +62,59 @@ export const BANDS = [
   {
     min: 0,
     max: 4,
-    title: 'Lançamento em risco',
-    text: 'A maior parte das áreas críticas nunca foi conferida. Se um cliente encontrar esses bugs antes de você, ele encontra todos de uma vez.',
+    title: 'Launch at risk',
+    text: 'Most of the critical areas have never been checked. If a customer finds these bugs before you do, they find them all at once.',
   },
   {
     min: 5,
     max: 9,
-    title: 'Base parcial, buracos abertos',
-    text: 'Você confere o caminho normal, mas os erros, os casos limite e as permissões continuam descobertos, que é onde o SaaS quebra.',
+    title: 'Partial base, open gaps',
+    text: "You check the normal path, but errors, edge cases and permissions are still uncovered, and that's where SaaS breaks.",
   },
   {
     min: 10,
     max: 14,
-    title: 'Quase pronto, feche as lacunas',
-    text: 'Sua base de conferência é boa. O que falta é transformar isso em método, para repetir a conferência inteira a cada lançamento.',
+    title: 'Almost ready, close the gaps',
+    text: "Your checking base is good. What's missing is turning it into a method, so you repeat the full check on every launch.",
   },
 ];
 
 export const STATUS = {
-  2: { label: 'conferido', icon: 'check' },
-  1: { label: 'parcial', icon: 'dot' },
-  0: { label: 'descoberto', icon: 'x' },
+  2: { label: 'checked', icon: 'check' },
+  1: { label: 'partial', icon: 'dot' },
+  0: { label: 'uncovered', icon: 'x' },
 };
 
 export const QUESTIONS_COPY = {
-  areaLabel: 'ÁREA',
-  ofSeven: 'DE 7',
-  counter: (n) => `Pergunta ${n} de 7`,
-  back: 'Voltar',
-  next: 'Continuar',
-  last: 'Ver o que falta',
+  areaLabel: 'AREA',
+  ofSeven: 'OF 7',
+  counter: (n) => `Question ${n} of 7`,
+  back: 'Back',
+  next: 'Continue',
+  last: "See what's missing",
+  optionsLabel: 'Answers',
 };
 
 export const EMAIL_COPY = {
-  eyebrow: 'SEU RESULTADO ESTÁ PRONTO',
-  counter: 'Falta só o e-mail',
-  title: 'Onde eu te mostro o diagnóstico?',
-  text: 'Deixe seu e-mail para ver a pontuação completa, com suas áreas descobertas e as aulas prioritárias para o seu caso.',
-  label: 'Seu e-mail para ver o diagnóstico',
-  placeholder: 'seu melhor e-mail',
-  button: 'Ver meu diagnóstico',
-  note: 'Seu resultado aparece na tela assim que você confirmar.',
-  error: 'Confira o e-mail digitado, parece que falta alguma coisa nele.',
+  eyebrow: 'YOUR RESULT IS READY',
+  counter: 'Just your email left',
+  title: 'Where should I show you the diagnostic?',
+  text: 'Leave your email to see your full score, with your uncovered areas and the ebooks to read first for your case.',
+  label: 'Your email to see the diagnostic',
+  placeholder: 'your best email',
+  button: 'Show my diagnostic',
+  note: 'Your result appears on screen as soon as you confirm.',
+  error: 'Please check the email you typed, something seems to be missing.',
 };
 
 export const RESULT_COPY = {
-  eyebrow: 'SEU DIAGNÓSTICO',
-  priorityIntro: 'Suas aulas prioritárias',
-  priorityOutro:
-    'São exatamente essas áreas que o curso destrincha, com o prompt pronto e a conferência manual de cada uma.',
-  noneTitle: 'Nenhuma área descoberta',
-  noneText:
-    'No curso, seu ganho é o método completo e a lista de liberação para repetir isso em todo lançamento.',
-  lessonsButton: 'Ver as aulas do curso',
-  redoButton: 'Refazer o diagnóstico',
-  note: 'Guarde suas áreas descobertas, elas viram o seu plano de conferência antes do próximo lançamento.',
+  eyebrow: 'YOUR DIAGNOSTIC',
+  ebookLabel: 'EBOOK',
+  priorityIntro: 'Your priority ebooks',
+  priorityOutro: 'These are exactly the areas the ebooks break down, each with a ready-made prompt and a manual check.',
+  noneTitle: 'No uncovered areas',
+  noneText: 'In the ebooks, what you gain is the complete method and the release checklist to repeat this on every launch.',
+  ebooksButton: 'See the ebooks',
+  redoButton: 'Retake the diagnostic',
+  note: 'Keep your uncovered areas, they become your checking plan before your next launch.',
 };
