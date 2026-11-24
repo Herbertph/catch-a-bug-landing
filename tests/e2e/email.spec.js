@@ -1,44 +1,44 @@
 import { expect, test } from '@playwright/test';
 import { fillEmail, reachEmail, reachResult, submitEmail } from './helpers.js';
 
-const ERROR = 'Confira o e-mail digitado, parece que falta alguma coisa nele.';
+const ERROR = 'Please check the email you typed, something seems to be missing.';
 const INVALID = ['', '   ', 'ana', 'ana@', '@site.com', 'ana@site', 'ana@site.c', 'ana silva@site.com', 'ana@@site.com'];
 
 test('TC-37 (AC-24): the e-mail screen shows the exact copy and field attributes', async ({ page }) => {
   await page.goto('/');
   await reachEmail(page);
 
-  await expect(page.locator('.quiz-area')).toHaveText('SEU RESULTADO ESTÁ PRONTO');
-  await expect(page.locator('.quiz-count')).toHaveText('Falta só o e-mail');
-  await expect(page.locator('.quiz-question')).toHaveText('Onde eu te mostro o diagnóstico?');
+  await expect(page.locator('.quiz-area')).toHaveText('YOUR RESULT IS READY');
+  await expect(page.locator('.quiz-count')).toHaveText('Just your email left');
+  await expect(page.locator('.quiz-question')).toHaveText('Where should I show you the diagnostic?');
   await expect(page.locator('.quiz-hint')).toHaveText(
-    'Deixe seu e-mail para ver a pontuação completa, com suas áreas descobertas e as aulas prioritárias para o seu caso.',
+    'Leave your email to see your full score, with your uncovered areas and the ebooks to read first for your case.',
   );
 
-  const field = page.getByLabel('Seu e-mail para ver o diagnóstico');
+  const field = page.getByLabel('Your email to see the diagnostic');
   await expect(field).toHaveAttribute('type', 'email');
   await expect(field).toHaveAttribute('autocomplete', 'email');
-  await expect(field).toHaveAttribute('placeholder', 'seu melhor e-mail');
+  await expect(field).toHaveAttribute('placeholder', 'your best email');
 
-  await expect(page.getByRole('button', { name: 'Ver meu diagnóstico' })).toBeVisible();
-  await expect(page.locator('.email-note')).toHaveText('Seu resultado aparece na tela assim que você confirmar.');
+  await expect(page.getByRole('button', { name: 'Show my diagnostic' })).toBeVisible();
+  await expect(page.locator('.email-note')).toHaveText('Your result appears on screen as soon as you confirm.');
 });
 
 test('TC-38 (AC-25): every invalid e-mail shows the exact error, focuses the field and shows no result', async ({ page }) => {
   await page.goto('/');
   await reachEmail(page);
 
-  const field = page.getByLabel('Seu e-mail para ver o diagnóstico');
+  const field = page.getByLabel('Your email to see the diagnostic');
   const error = page.locator('.email-error');
 
   for (const value of INVALID) {
     await fillEmail(page, value);
-    await page.getByRole('button', { name: 'Ver meu diagnóstico' }).click();
+    await page.getByRole('button', { name: 'Show my diagnostic' }).click();
 
     await expect(error, `error for ${JSON.stringify(value)}`).toBeVisible();
     await expect(error).toHaveText(ERROR);
     await expect(field).toBeFocused();
-    await expect(page.getByText('SEU DIAGNÓSTICO')).toHaveCount(0);
+    await expect(page.getByText('YOUR DIAGNOSTIC')).toHaveCount(0);
   }
 });
 
@@ -47,14 +47,14 @@ test('TC-39 (AC-26): a valid e-mail clears the error and shows the result immedi
   await reachEmail(page);
 
   await fillEmail(page, 'ana');
-  await page.getByRole('button', { name: 'Ver meu diagnóstico' }).click();
+  await page.getByRole('button', { name: 'Show my diagnostic' }).click();
   await expect(page.locator('.email-error')).toBeVisible();
 
   await fillEmail(page, 'ana@site.com');
-  await page.getByRole('button', { name: 'Ver meu diagnóstico' }).click();
+  await page.getByRole('button', { name: 'Show my diagnostic' }).click();
 
   await expect(page.locator('.email-error')).toHaveCount(0);
-  await expect(page.getByText('SEU DIAGNÓSTICO')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
   await expect(page.locator('.quiz-email')).toHaveText('ana@site.com');
 });
 
@@ -73,8 +73,8 @@ test('TC-41 (AC-27): the e-mail is never sent over the network', async ({ page }
   await page.goto('/');
   await reachEmail(page);
   await fillEmail(page, 'ana@site.com');
-  await page.getByRole('button', { name: 'Ver meu diagnóstico' }).click();
-  await expect(page.getByText('SEU DIAGNÓSTICO')).toBeVisible();
+  await page.getByRole('button', { name: 'Show my diagnostic' }).click();
+  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
 
   expect(requests.filter((request) => request.includes('ana@site.com'))).toEqual([]);
 });
@@ -85,7 +85,7 @@ test('TC-42 (AC-27): e-mail markup is rendered as text, not HTML', async ({ page
 
   await submitEmail(page, '<b>x</b>@a.bc');
 
-  await expect(page.getByText('SEU DIAGNÓSTICO')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
   await expect(page.locator('.quiz-email')).toHaveText('<b>x</b>@a.bc');
   await expect(page.locator('.quiz-email *')).toHaveCount(0);
 });

@@ -3,53 +3,53 @@ import { answer, goNext, openQuiz, selectOption } from './helpers.js';
 
 const AREAS = [
   {
-    area: 'LOGIN E SESSÃO',
+    area: 'LOGIN AND SESSION',
     question:
-      'Você já testou o que acontece quando o usuário erra a senha, pede para recuperar a conta ou fica com a sessão expirada?',
-    hint: 'Não vale só o login feliz, o problema mora no erro e na volta.',
+      'Have you tested what happens when a user types the wrong password, asks to recover their account or has their session expire?',
+    hint: "The happy login doesn't count, the trouble lives in the errors and the way back.",
   },
   {
-    area: 'PAGAMENTO E CHECKOUT',
+    area: 'PAYMENT AND CHECKOUT',
     question:
-      'Você já simulou um cartão recusado no seu checkout para ver o que acontece com a cobrança e com o acesso do cliente?',
-    hint: 'Pagamento que falha é onde SaaS novo mais cobra errado ou libera sem pagar.',
+      "Have you simulated a declined card in your checkout to see what happens to the charge and to the customer's access?",
+    hint: 'A failed payment is where new SaaS most often charges wrong or gives access without payment.',
   },
   {
-    area: 'SALVAMENTO E PERDA DE DADOS',
+    area: 'SAVING AND DATA LOSS',
     question:
-      'Depois de salvar algo no seu SaaS, você já atualizou a página, fechou tudo e voltou para conferir se continuou lá?',
-    hint: 'Dado que some sem aviso é o bug que o cliente menos perdoa.',
+      'After saving something in your SaaS, have you refreshed the page, closed everything and come back to check it was still there?',
+    hint: 'Data that disappears without warning is the bug customers forgive the least.',
   },
   {
-    area: 'PERMISSÕES E ACESSO',
+    area: 'PERMISSIONS AND ACCESS',
     question:
-      'Você já tentou acessar dados de outra conta, trocando o endereço da página ou entrando como usuário comum em área restrita?',
-    hint: 'O vazamento mais comum não é invasão, é permissão que ninguém testou.',
+      "Have you tried to reach another account's data, by changing the page address or by signing in as a regular user to a restricted area?",
+    hint: "The most common leak isn't a hack, it's a permission nobody tested.",
   },
   {
-    area: 'FLUXO PRINCIPAL PONTA A PONTA',
+    area: 'MAIN FLOW, END TO END',
     question:
-      'Você já fez a jornada completa como um cliente novo, cadastro, primeiro uso e pagamento, sem pular nenhuma etapa?',
-    hint: 'Testar tela por tela esconde o bug que mora entre as telas.',
+      'Have you gone through the full journey as a new customer, sign up, first use and payment, without skipping a step?',
+    hint: 'Testing screen by screen hides the bug that lives between the screens.',
   },
   {
-    area: 'ERROS E CASOS LIMITE',
+    area: 'ERRORS AND EDGE CASES',
     question:
-      'Você já enviou formulários vazios, clicou duas vezes no botão de pagar ou simulou a internet caindo no meio de um envio?',
-    hint: 'Seu usuário vai fazer tudo isso, a pergunta é como seu SaaS responde.',
+      'Have you submitted empty forms, double clicked the pay button or simulated the internet dropping in the middle of a submit?',
+    hint: 'Your users will do all of this, the question is how your SaaS responds.',
   },
   {
-    area: 'MOBILE E NAVEGADORES',
+    area: 'MOBILE AND BROWSERS',
     question:
-      'Você já abriu seu SaaS no celular e em um navegador diferente do seu para conferir se funciona do mesmo jeito?',
-    hint: 'Seu cliente não usa o seu computador, nem o seu navegador, nem a sua internet.',
+      'Have you opened your SaaS on a phone and in a browser other than yours to check it works the same way?',
+    hint: "Your customer doesn't use your computer, your browser or your internet connection.",
   },
 ];
 
 const OPTIONS = [
-  'Sim, já testei isso de verdade',
-  'Testei só o caminho normal, sem erro',
-  'Nunca testei isso',
+  "Yes, I've really tested this",
+  'I only tested the normal path, no errors',
+  "I've never tested this",
 ];
 
 const progressRatio = (page) =>
@@ -64,8 +64,8 @@ test('TC-28 (AC-16): every question shows the exact area, counter, question, hin
 
   for (let index = 0; index < AREAS.length; index += 1) {
     const entry = AREAS[index];
-    await expect(page.locator('.quiz-area')).toHaveText(`ÁREA ${index + 1} DE 7, ${entry.area}`);
-    await expect(page.locator('.quiz-count')).toHaveText(`Pergunta ${index + 1} de 7`);
+    await expect(page.locator('.quiz-area')).toHaveText(`AREA ${index + 1} OF 7, ${entry.area}`);
+    await expect(page.locator('.quiz-count')).toHaveText(`Question ${index + 1} of 7`);
     await expect(page.locator('.quiz-question')).toHaveText(entry.question);
     await expect(page.locator('.quiz-hint')).toHaveText(entry.hint);
     await expect(page.locator('.quiz-option')).toHaveText(OPTIONS);
@@ -84,7 +84,7 @@ test('TC-29 (AC-17): Continuar is disabled and does not advance without a select
   const next = page.locator('.quiz-next');
   await expect(next).toBeDisabled();
   await next.evaluate((button) => button.click());
-  await expect(page.locator('.quiz-count')).toHaveText('Pergunta 1 de 7');
+  await expect(page.locator('.quiz-count')).toHaveText('Question 1 of 7');
 });
 
 test('TC-30 (AC-18): only the last selected option stays pressed and enables Continuar', async ({ page }) => {
@@ -124,7 +124,7 @@ test('TC-32 (AC-20): going back keeps the previous answer selected and Continuar
   await goNext(page);
   await page.locator('.quiz-back').click();
 
-  await expect(page.locator('.quiz-count')).toHaveText('Pergunta 1 de 7');
+  await expect(page.locator('.quiz-count')).toHaveText('Question 1 of 7');
   await expect(page.locator('.quiz-option').nth(1)).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('.quiz-next')).toBeEnabled();
 });
@@ -147,7 +147,7 @@ test('TC-33 (AC-21): the progress bar follows (N-1)/7 and reaches 100% on the e-
 
   await selectOption(page, 0);
   await goNext(page);
-  await expect(page.getByLabel('Seu e-mail para ver o diagnóstico')).toBeVisible();
+  await expect(page.getByLabel('Your email to see the diagnostic')).toBeVisible();
   expect(await progressRatio(page)).toBeCloseTo(100, 0);
 });
 
@@ -161,12 +161,12 @@ test('TC-34 (AC-22): question 7 reads "Ver o que falta" and leads to the e-mail 
   }
 
   const next = page.locator('.quiz-next');
-  await expect(next).toHaveText('Ver o que falta');
+  await expect(next).toHaveText("See what's missing");
   await selectOption(page, 0);
   await next.click();
 
-  await expect(page.getByLabel('Seu e-mail para ver o diagnóstico')).toBeVisible();
-  await expect(page.getByText('SEU DIAGNÓSTICO')).toHaveCount(0);
+  await expect(page.getByLabel('Your email to see the diagnostic')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC')).toHaveCount(0);
 });
 
 test('TC-35 (AC-23): the phone screen scrolls back to the top on every screen change', async ({ page }) => {
@@ -204,7 +204,7 @@ test('TC-36 (AC-23): the phone screen scrolls back to the top on the e-mail and 
   expect(await screen.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
 
   await page.locator('.quiz-next').click();
-  await expect(page.getByLabel('Seu e-mail para ver o diagnóstico')).toBeVisible();
+  await expect(page.getByLabel('Your email to see the diagnostic')).toBeVisible();
   expect(await screen.evaluate((el) => el.scrollTop)).toBe(0);
 
   await screen.evaluate((el) => {
@@ -212,8 +212,8 @@ test('TC-36 (AC-23): the phone screen scrolls back to the top on the e-mail and 
   });
   expect(await screen.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
 
-  await page.getByLabel('Seu e-mail para ver o diagnóstico').fill('ana@site.com');
-  await page.getByRole('button', { name: 'Ver meu diagnóstico' }).click();
-  await expect(page.getByText('SEU DIAGNÓSTICO')).toBeVisible();
+  await page.getByLabel('Your email to see the diagnostic').fill('ana@site.com');
+  await page.getByRole('button', { name: 'Show my diagnostic' }).click();
+  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
   expect(await screen.evaluate((el) => el.scrollTop)).toBe(0);
 });

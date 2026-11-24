@@ -1,91 +1,100 @@
 import { expect, test } from '@playwright/test';
 
-const LESSON_TITLES = [
-  'Introdução, por que SaaS feito com IA quebra diferente',
-  'Login e sessão',
-  'Pagamento e checkout',
-  'Salvamento e perda de dados',
-  'Permissões e acesso',
-  'Fluxo principal ponta a ponta',
-  'Erros e casos limite',
-  'Mobile, navegadores e o lançamento',
+const EBOOK_TITLES = [
+  'Login and session',
+  'Payment and checkout',
+  'Saving and data loss',
+  'Permissions and access',
+  'Main flow, end to end',
+  'Errors and edge cases',
+  'Mobile, browsers and the launch',
 ];
 
-const LESSON_SUBTITLES = [
-  'O erro não está no código que você vê, está no que ninguém conferiu',
-  'Se o usuário não entra, nada mais importa',
-  'A área onde um bug vira prejuízo na hora',
-  'O usuário confia que o que salvou vai estar lá',
-  'Um cliente nunca pode ver o que é de outro',
-  'A jornada completa, na ordem do cliente',
-  'Seu usuário vai fazer tudo que você não imaginou',
-  'Conferir onde seu cliente realmente acessa',
+const EBOOK_SUBTITLES = [
+  "If users can't get in, nothing else matters",
+  'The area where a bug becomes a loss on the spot',
+  'Users trust that what they saved will still be there',
+  'A customer must never see what belongs to another',
+  "The full journey, in the customer's order",
+  "Your users will do everything you didn't imagine",
+  'Check where your customers really use it',
+];
+
+const EBOOK_BODIES = [
+  "Login is the front door of your SaaS, and a broken door doesn't show up in your quick test, it shows up for a customer at 10 p.m. on a Sunday. You check sign up, login, logout, password recovery, expiring sessions and what happens when a user tries to sign in twice or with the wrong password.",
+  'Approved payment, declined payment, renewing subscription, cancelled subscription, refund. You test the whole money path, including the card that fails, because errors are exactly where new SaaS charge wrong, give access without payment or lock out people who paid.',
+  'Create, edit, delete and reload. You check that everything a user saves survives a page refresh, closing and coming back, editing twice and deleting by accident. Losing customer data is the least forgiven bug, and one of the simplest to prevent.',
+  "The most common leak in a SaaS built fast isn't a hack, it's a permission nobody tested, changing a number in the URL and opening someone else's account. You learn to test user roles, admin access and isolation between accounts, the way a professional tester does.",
+  'Testing screen by screen hides the bug that lives between the screens. In this ebook you walk the whole journey as a new customer, sign up, first use, payment and final result, and find where the experience breaks along the way.',
+  'Empty field, giant text, double click on the pay button, internet dropping in the middle of a submit. You test how your SaaS behaves when something goes wrong, so it answers with a clear message instead of a broken screen or a double charge.',
+  'Your customer opens it on a phone, in the browser they already use, with the internet connection they have. In the final ebook you check responsive layout, the main browsers and perceived speed, and build your release checklist, the checking ritual to repeat on every launch from now on.',
+];
+
+const EBOOK_TAGS = [
+  ['AREA, AUTHENTICATION', 'PROMPTS INCLUDED', 'MANUAL CHECKLIST'],
+  ['AREA, REVENUE', 'PROMPTS INCLUDED', 'MANUAL CHECKLIST'],
+  ['AREA, DATA', 'PROMPTS INCLUDED', 'MANUAL CHECKLIST'],
+  ['AREA, BASIC SECURITY', 'PROMPTS INCLUDED', 'MANUAL CHECKLIST'],
+  ['AREA, CUSTOMER JOURNEY', 'PROMPTS INCLUDED', 'MANUAL CHECKLIST'],
+  ['AREA, RESILIENCE', 'PROMPTS INCLUDED', 'MANUAL CHECKLIST'],
+  ['AREA, FINAL EXPERIENCE', 'PROMPTS INCLUDED', 'RELEASE CHECKLIST'],
 ];
 
 const FAQ_QUESTIONS = [
-  'Preciso saber programar para fazer o curso?',
-  'Funciona com a ferramenta que eu uso?',
-  'Quando o curso lança e quanto vai custar?',
-  'O diagnóstico é gratuito?',
-  'Eu já lancei meu SaaS. Ainda faz sentido?',
+  'Do I need to know how to code to use the ebooks?',
+  'Do they work with the tool I use?',
+  'When do the ebooks launch and how much will they cost?',
+  'Is the diagnostic free?',
+  "I've already launched my SaaS. Does this still make sense?",
 ];
 
-test('TC-50 (AC-34): the course accordion has the 8 exact lessons and lesson 00 is open', async ({ page }) => {
+const FAQ_ANSWERS = [
+  'No. The ebooks were designed for people who build with an agent. In each one, the ready-made prompt does the technical part with your LLM, and the manual check happens on screen, clicking and watching, without writing code.',
+  "Yes. The prompts and checks don't depend on a specific tool. They work with Cursor, Claude, Copilot, ChatGPT and any other agent or LLM you already use to build your SaaS.",
+  'The ebooks are in production and will launch when the series is complete, with date and price published here. Meanwhile, the diagnostic already shows which areas of your SaaS need attention first.',
+  "Yes. It's 7 questions, it takes about 1 minute, and the result appears on screen with your score from 0 to 14 and the status of each area. We ask for your email before showing the result, that's all.",
+  'It does, maybe even more. The 7 tests become a checking ritual for every new version, every new feature and every fix the agent delivers. A launched product breaks in an update the same way it breaks at launch.',
+];
+
+test('TC-50 (AC-11): the ebooks accordion has the 7 exact ebooks and Ebook 01 is open', async ({ page }) => {
   await page.goto('/');
 
-  const triggers = page.locator('.course-accordion .acc-trigger');
-  await expect(triggers).toHaveCount(8);
-  await expect(page.locator('.course-accordion .acc-title')).toHaveText(LESSON_TITLES);
-  await expect(page.locator('.course-accordion .acc-sub')).toHaveText(LESSON_SUBTITLES);
+  const triggers = page.locator('.ebook-accordion .acc-trigger');
+  await expect(triggers).toHaveCount(7);
+  await expect(page.locator('.ebook-accordion .acc-num')).toHaveText(['01', '02', '03', '04', '05', '06', '07']);
+  await expect(page.locator('.ebook-accordion .acc-title')).toHaveText(EBOOK_TITLES);
+  await expect(page.locator('.ebook-accordion .acc-sub')).toHaveText(EBOOK_SUBTITLES);
 
   await expect(triggers.nth(0)).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.locator('#aula-00')).toBeVisible();
-  await expect(page.locator('#aula-00 p')).toHaveText(
-    'Software feito com agente falha de um jeito próprio, o agente resolve o que foi pedido e não avisa o que ficou de fora, caso limite, erro de pagamento, permissão aberta. Nesta aula você entende esse padrão, monta seu ambiente de conferência e aprende a ordem certa de testar antes de qualquer lançamento.',
-  );
+  await expect(page.locator('#ebook-01')).toBeVisible();
+  await expect(page.locator('#ebook-01 p')).toHaveText(EBOOK_BODIES[0]);
 
-  for (let index = 1; index < 8; index += 1) {
+  for (let index = 1; index < 7; index += 1) {
     await expect(triggers.nth(index)).toHaveAttribute('aria-expanded', 'false');
-    await expect(page.locator(`#aula-0${index}`)).toBeHidden();
+    await expect(page.locator(`#ebook-0${index + 1}`)).toBeHidden();
   }
-
-  await expect(page.locator('#aula-00 .tag')).toHaveText([
-    'AULA DE ABERTURA',
-    'MAPA DOS 7 TESTES',
-    'AMBIENTE DE TESTE',
-  ]);
-  await expect(page.locator('#aula-01 .tag')).toHaveText([
-    'ÁREA, AUTENTICAÇÃO',
-    'PROMPT INCLUSO',
-    'CHECKLIST MANUAL',
-  ]);
-  await expect(page.locator('#aula-07 .tag')).toHaveText([
-    'ÁREA, EXPERIÊNCIA FINAL',
-    'PROMPT INCLUSO',
-    'LISTA DE LIBERAÇÃO',
-  ]);
 });
 
-test('TC-52 (AC-35): opening a lesson closes the previous one and clicking it again closes everything', async ({ page }) => {
+test('TC-52 (AC-11): opening Ebook 04 closes Ebook 01 and clicking it again closes everything', async ({ page }) => {
   await page.goto('/');
 
-  const triggers = page.locator('.course-accordion .acc-trigger');
+  const triggers = page.locator('.ebook-accordion .acc-trigger');
   await triggers.nth(3).click();
 
   await expect(triggers.nth(3)).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.locator('#aula-03')).toBeVisible();
+  await expect(page.locator('#ebook-04')).toBeVisible();
   await expect(triggers.nth(0)).toHaveAttribute('aria-expanded', 'false');
-  await expect(page.locator('#aula-00')).toBeHidden();
+  await expect(page.locator('#ebook-01')).toBeHidden();
 
   await triggers.nth(3).click();
   await expect(triggers.nth(3)).toHaveAttribute('aria-expanded', 'false');
-  await expect(page.locator('#aula-03')).toBeHidden();
+  await expect(page.locator('#ebook-04')).toBeHidden();
 
   const expanded = await triggers.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('aria-expanded')));
-  expect(expanded).toEqual(Array(8).fill('false'));
+  expect(expanded).toEqual(Array(7).fill('false'));
 });
 
-test('TC-53 (AC-36): the FAQ has the 5 exact questions, all closed, one open at a time', async ({ page }) => {
+test('TC-53 (AC-12): the FAQ has the 5 exact questions, all closed, one open at a time', async ({ page }) => {
   await page.goto('/');
 
   const triggers = page.locator('.faq-accordion .acc-trigger');
@@ -100,9 +109,7 @@ test('TC-53 (AC-36): the FAQ has the 5 exact questions, all closed, one open at 
   await triggers.nth(0).click();
   await expect(triggers.nth(0)).toHaveAttribute('aria-expanded', 'true');
   await expect(page.locator('#faq-1')).toBeVisible();
-  await expect(page.locator('#faq-1 p')).toHaveText(
-    'Não. O curso foi desenhado para quem constrói com agente. Em cada aula, o prompt pronto faz a parte técnica com a sua LLM, e a conferência manual é feita na tela, clicando e observando, sem escrever código.',
-  );
+  await expect(page.locator('#faq-1 p')).toHaveText(FAQ_ANSWERS[0]);
 
   await triggers.nth(1).click();
   await expect(triggers.nth(1)).toHaveAttribute('aria-expanded', 'true');
@@ -115,43 +122,20 @@ test('TC-53 (AC-36): the FAQ has the 5 exact questions, all closed, one open at 
   await expect(page.locator('#faq-2')).toBeHidden();
 });
 
-test('TC-51 (AC-34): every lesson body and all course tags are exact', async ({ page }) => {
+test('TC-51 (AC-2): every ebook body and tag is exact, and the first tag is the gold one', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.locator('.course-accordion .acc-panel p')).toHaveText([
-    'Software feito com agente falha de um jeito próprio, o agente resolve o que foi pedido e não avisa o que ficou de fora, caso limite, erro de pagamento, permissão aberta. Nesta aula você entende esse padrão, monta seu ambiente de conferência e aprende a ordem certa de testar antes de qualquer lançamento.',
-    'Login é a porta do seu SaaS, e porta quebrada não aparece no seu teste rápido, aparece para o cliente às 22h de um domingo. Você confere cadastro, login, logout, recuperação de senha, sessão que expira e o que acontece quando o usuário tenta entrar duas vezes ou com a senha errada.',
-    'Pagamento aprovado, pagamento recusado, assinatura que renova, assinatura que cancela, reembolso. Você testa o caminho do dinheiro inteiro, incluindo o cartão que falha, porque é justamente no erro que os SaaS novos cobram errado, liberam acesso sem pagar ou bloqueiam quem pagou.',
-    'Criar, editar, apagar e recarregar. Você confere se tudo que o usuário salva sobrevive a atualizar a página, fechar e voltar, editar duas vezes e apagar sem querer. Perder dado do cliente é o bug que menos se perdoa, e um dos mais simples de prevenir.',
-    'O vazamento mais comum em SaaS feito rápido não é invasão, é permissão que ninguém testou, trocar um número na URL e abrir a conta de outra pessoa. Você aprende a testar papéis de usuário, acesso de administrador e isolamento entre contas, do jeito que um testador profissional faz.',
-    'Testar tela por tela esconde o bug que mora entre as telas. Nesta aula você percorre a jornada inteira como um cliente novo, cadastro, primeiro uso, pagamento e resultado final, e descobre onde a experiência quebra no meio do caminho.',
-    'Campo vazio, texto gigante, clique duplo no botão de pagar, internet que cai no meio do envio. Você testa o comportamento do seu SaaS quando algo dá errado, para ele responder com uma mensagem clara em vez de uma tela quebrada ou uma cobrança duplicada.',
-    'Seu cliente abre no celular, no navegador que ele já usa, com a internet que ele tem. Na aula final você confere responsivo, navegadores principais e velocidade percebida, e monta sua lista final de liberação, o ritual de conferência para repetir em todo lançamento daqui para frente.',
-  ]);
-
-  const tags = [
-    ['AULA DE ABERTURA', 'MAPA DOS 7 TESTES', 'AMBIENTE DE TESTE'],
-    ['ÁREA, AUTENTICAÇÃO', 'PROMPT INCLUSO', 'CHECKLIST MANUAL'],
-    ['ÁREA, RECEITA', 'PROMPT INCLUSO', 'CHECKLIST MANUAL'],
-    ['ÁREA, DADOS', 'PROMPT INCLUSO', 'CHECKLIST MANUAL'],
-    ['ÁREA, SEGURANÇA BÁSICA', 'PROMPT INCLUSO', 'CHECKLIST MANUAL'],
-    ['ÁREA, JORNADA DO CLIENTE', 'PROMPT INCLUSO', 'CHECKLIST MANUAL'],
-    ['ÁREA, RESILIÊNCIA', 'PROMPT INCLUSO', 'CHECKLIST MANUAL'],
-    ['ÁREA, EXPERIÊNCIA FINAL', 'PROMPT INCLUSO', 'LISTA DE LIBERAÇÃO'],
-  ];
-  for (let index = 0; index < tags.length; index += 1) {
-    await expect(page.locator(`#aula-0${index} .tag`)).toHaveText(tags[index]);
+  await expect(page.locator('.ebook-accordion .acc-panel p')).toHaveText(EBOOK_BODIES);
+  for (let index = 0; index < EBOOK_TAGS.length; index += 1) {
+    const tags = page.locator(`#ebook-0${index + 1} .tag`);
+    await expect(tags).toHaveText(EBOOK_TAGS[index]);
+    await expect(tags.first()).toHaveClass(/tag-gold/);
+    await expect(page.locator(`#ebook-0${index + 1} .tag-gold`)).toHaveCount(1);
   }
 });
 
-test('TC-54 (AC-36): every FAQ answer is exact', async ({ page }) => {
+test('TC-54 (AC-2): every FAQ answer is exact', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page.locator('.faq-accordion .acc-panel p')).toHaveText([
-    'Não. O curso foi desenhado para quem constrói com agente. Em cada aula, o prompt pronto faz a parte técnica com a sua LLM, e a conferência manual é feita na tela, clicando e observando, sem escrever código.',
-    'Sim. Os prompts e as conferências não dependem de uma ferramenta específica. Servem para Cursor, Claude, Copilot, ChatGPT e qualquer outro agente ou LLM que você já use para construir seu SaaS.',
-    'O curso está em produção e será lançado quando estiver completo, com data e preço publicados aqui. Enquanto isso, o diagnóstico já mostra quais áreas do seu SaaS precisam de atenção primeiro.',
-    'Sim. São 7 perguntas, leva cerca de 1 minuto, e o resultado aparece na tela com sua pontuação de 0 a 14 e o status de cada área. Pedimos seu e-mail antes de mostrar o resultado, só isso.',
-    'Faz, e talvez faça ainda mais. Os 7 testes viram um ritual de conferência para cada nova versão, cada nova funcionalidade e cada correção que o agente entregar. Produto lançado quebra em atualização do mesmo jeito que quebra em lançamento.',
-  ]);
+  await expect(page.locator('.faq-accordion .acc-panel p')).toHaveText(FAQ_ANSWERS);
 });

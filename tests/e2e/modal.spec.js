@@ -13,8 +13,8 @@ for (const [tc, label, selector] of triggers) {
     await page.goto('/');
     await page.locator(selector).click();
 
-    await expect(page.getByRole('dialog', { name: 'Diagnóstico rápido, 7 perguntas' })).toBeVisible();
-    await expect(page.locator('.quiz-count')).toHaveText('Pergunta 1 de 7');
+    await expect(page.getByRole('dialog', { name: 'Quick diagnostic, 7 questions' })).toBeVisible();
+    await expect(page.locator('.quiz-count')).toHaveText('Question 1 of 7');
     await expect(page.locator('.quiz-option[aria-pressed="true"]')).toHaveCount(0);
 
     await closeQuiz(page);
@@ -34,14 +34,14 @@ test('TC-18 (AC-10): one quiz instance exists, inside the modal, never visible i
   await expect(page.locator('#quiz-modal #quiz')).toHaveCount(1);
   await expect(page.locator('#quiz-modal')).toBeHidden();
   await expect(page.locator('.quiz-question')).toBeHidden();
-  await expect(page.getByLabel('Seu e-mail para ver o diagnóstico')).toHaveCount(0);
+  await expect(page.getByLabel('Your email to see the diagnostic')).toHaveCount(0);
 });
 
 test('TC-19 (AC-11): dialog role, accessible name, focus on close and locked body scroll', async ({ page }) => {
   await page.goto('/');
   await openQuiz(page);
 
-  const dialog = page.getByRole('dialog', { name: 'Diagnóstico rápido, 7 perguntas' });
+  const dialog = page.getByRole('dialog', { name: 'Quick diagnostic, 7 questions' });
   await expect(dialog).toHaveAttribute('aria-modal', 'true');
   await expect(page.locator('.modal-close')).toBeFocused();
 
@@ -63,7 +63,7 @@ test('TC-21 (AC-12): closes with the close button', async ({ page }) => {
   await page.goto('/');
   await openQuiz(page);
 
-  await page.getByRole('button', { name: 'Fechar o diagnóstico' }).click();
+  await page.getByRole('button', { name: 'Close the diagnostic' }).click();
   await expect(page.locator('#quiz-modal')).toBeHidden();
   const overflow = await page.evaluate(() => getComputedStyle(document.body).overflow);
   expect(overflow).not.toBe('hidden');
@@ -82,7 +82,7 @@ test('TC-23 (AC-13): clicking inside the phone frame keeps the modal open', asyn
   await openQuiz(page);
 
   await page.locator('.phone-top').click({ position: { x: 60, y: 20 } });
-  await expect(page.getByRole('dialog', { name: 'Diagnóstico rápido, 7 perguntas' })).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Quick diagnostic, 7 questions' })).toBeVisible();
 });
 
 test('TC-24 (AC-14): the desktop frame is 400px wide, 40px rounded, centered and shows the notch', async ({ page }) => {
@@ -97,7 +97,7 @@ test('TC-24 (AC-14): the desktop frame is 400px wide, 40px rounded, centered and
   const radius = await frame.evaluate((el) => getComputedStyle(el).borderRadius);
   expect(radius).toBe('40px');
   await expect(page.locator('.notch')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Fechar o diagnóstico' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Close the diagnostic' })).toBeVisible();
 });
 
 test('TC-26 (AC-15): closing and reopening restarts on question 1 after some answers', async ({ page }) => {
@@ -109,7 +109,7 @@ test('TC-26 (AC-15): closing and reopening restarts on question 1 after some ans
   await closeQuiz(page);
   await openQuiz(page);
 
-  await expect(page.locator('.quiz-count')).toHaveText('Pergunta 1 de 7');
+  await expect(page.locator('.quiz-count')).toHaveText('Question 1 of 7');
   await expect(page.locator('.quiz-option[aria-pressed="true"]')).toHaveCount(0);
 });
 
@@ -120,31 +120,31 @@ test('TC-27 (AC-15): closing and reopening restarts on question 1 after the resu
   await closeQuiz(page);
   await openQuiz(page);
 
-  await expect(page.locator('.quiz-count')).toHaveText('Pergunta 1 de 7');
+  await expect(page.locator('.quiz-count')).toHaveText('Question 1 of 7');
   await expect(page.locator('.quiz-option[aria-pressed="true"]')).toHaveCount(0);
 });
 
-test('TC-48 (AC-32): "Ver as aulas do curso" closes the modal and scrolls to #aulas', async ({ page }) => {
+test('TC-48 (AC-32): "See the ebooks" closes the modal and scrolls to #ebooks', async ({ page }) => {
   await page.goto('/');
   await reachResult(page, Array(7).fill(0));
 
-  await page.getByRole('button', { name: 'Ver as aulas do curso' }).click();
+  await page.getByRole('button', { name: 'See the ebooks' }).click();
 
   await expect(page.locator('#quiz-modal')).toBeHidden();
   await expect
-    .poll(() => page.evaluate(() => Math.round(document.getElementById('aulas').getBoundingClientRect().top)))
+    .poll(() => page.evaluate(() => Math.round(document.getElementById('ebooks').getBoundingClientRect().top)))
     .toBeLessThanOrEqual(120);
   const scrollY = await page.evaluate(() => window.scrollY);
   expect(scrollY).toBeGreaterThan(0);
 });
 
-test('TC-49 (AC-33): "Refazer o diagnóstico" keeps the modal open and restarts on question 1', async ({ page }) => {
+test('TC-49 (AC-33): "Retake the diagnostic" keeps the modal open and restarts on question 1', async ({ page }) => {
   await page.goto('/');
   await reachResult(page, Array(7).fill(2));
 
-  await page.getByRole('button', { name: 'Refazer o diagnóstico' }).click();
+  await page.getByRole('button', { name: 'Retake the diagnostic' }).click();
 
-  await expect(page.getByRole('dialog', { name: 'Diagnóstico rápido, 7 perguntas' })).toBeVisible();
-  await expect(page.locator('.quiz-count')).toHaveText('Pergunta 1 de 7');
+  await expect(page.getByRole('dialog', { name: 'Quick diagnostic, 7 questions' })).toBeVisible();
+  await expect(page.locator('.quiz-count')).toHaveText('Question 1 of 7');
   await expect(page.locator('.quiz-option[aria-pressed="true"]')).toHaveCount(0);
 });

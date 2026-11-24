@@ -38,7 +38,7 @@ test('TC-58 (AC-39): the quiz opens and options are selected with Space and Ente
 
   await page.locator('.header-cta').focus();
   await page.keyboard.press('Enter');
-  await expect(page.getByRole('dialog', { name: 'Diagnóstico rápido, 7 perguntas' })).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Quick diagnostic, 7 questions' })).toBeVisible();
   await expect(page.locator('.modal-close')).toBeFocused();
 
   await page.keyboard.press('Tab');
