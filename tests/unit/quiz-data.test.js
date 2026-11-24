@@ -9,9 +9,9 @@ const strings = (value) => {
 };
 
 describe('quiz data', () => {
-  it('has the 7 areas with their lesson numbers, questions and hints', () => {
+  it('has the 7 areas with their ebook numbers, questions and hints', () => {
     expect(AREAS).toHaveLength(7);
-    expect(AREAS.map((entry) => entry.lesson)).toEqual(['01', '02', '03', '04', '05', '06', '07']);
+    expect(AREAS.map((entry) => entry.ebook)).toEqual(['01', '02', '03', '04', '05', '06', '07']);
     for (const entry of AREAS) {
       expect(entry.area.length).toBeGreaterThan(0);
       expect(entry.question.length).toBeGreaterThan(0);
@@ -21,9 +21,9 @@ describe('quiz data', () => {
 
   it('has the 3 options in order with 2, 1 and 0 points', () => {
     expect(OPTIONS.map((option) => option.label)).toEqual([
-      'Sim, já testei isso de verdade',
-      'Testei só o caminho normal, sem erro',
-      'Nunca testei isso',
+      "Yes, I've really tested this",
+      'I only tested the normal path, no errors',
+      "I've never tested this",
     ]);
     expect(OPTIONS.map((option) => option.points)).toEqual([2, 1, 0]);
   });
@@ -35,25 +35,25 @@ describe('quiz data', () => {
       [10, 14],
     ]);
     expect(BANDS.map((band) => band.title)).toEqual([
-      'Lançamento em risco',
-      'Base parcial, buracos abertos',
-      'Quase pronto, feche as lacunas',
+      'Launch at risk',
+      'Partial base, open gaps',
+      'Almost ready, close the gaps',
     ]);
   });
 
   it('uses the three status labels in lowercase', () => {
-    expect(STATUS[2].label).toBe('conferido');
-    expect(STATUS[1].label).toBe('parcial');
-    expect(STATUS[0].label).toBe('descoberto');
+    expect(STATUS[2].label).toBe('checked');
+    expect(STATUS[1].label).toBe('partial');
+    expect(STATUS[0].label).toBe('uncovered');
   });
 
   it('has the exact quiz, e-mail and result strings', () => {
-    expect(QUESTIONS_COPY.counter(3)).toBe('Pergunta 3 de 7');
-    expect(QUESTIONS_COPY.last).toBe('Ver o que falta');
-    expect(EMAIL_COPY.error).toBe('Confira o e-mail digitado, parece que falta alguma coisa nele.');
-    expect(EMAIL_COPY.label).toBe('Seu e-mail para ver o diagnóstico');
-    expect(RESULT_COPY.priorityIntro).toBe('Suas aulas prioritárias');
-    expect(RESULT_COPY.redoButton).toBe('Refazer o diagnóstico');
+    expect(QUESTIONS_COPY.counter(3)).toBe('Question 3 of 7');
+    expect(QUESTIONS_COPY.last).toBe("See what's missing");
+    expect(EMAIL_COPY.error).toBe('Please check the email you typed, something seems to be missing.');
+    expect(EMAIL_COPY.label).toBe('Your email to see the diagnostic');
+    expect(RESULT_COPY.priorityIntro).toBe('Your priority ebooks');
+    expect(RESULT_COPY.redoButton).toBe('Retake the diagnostic');
   });
 
   it('never uses an em dash or an en dash', () => {
