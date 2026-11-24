@@ -108,7 +108,7 @@ a raw hex or `rgb()` color.
 ## Conventions
 
 - Everything in the repository is written in English: code, comments, docs, commit messages, PR descriptions.
-  The page copy is pt-BR and must be copied letter by letter from the source document.
+  The page copy is English and must be copied letter by letter from `docs/reference/landing-copy-en.md`.
 - Keep business logic in pure, testable functions, separate from UI code.
 - Never render user input as HTML.
 - Prefer accessible markup (labels, roles, `aria-*`). End-to-end tests locate elements with `getByRole`,
