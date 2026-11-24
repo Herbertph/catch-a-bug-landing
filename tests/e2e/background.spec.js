@@ -49,7 +49,7 @@ for (const [name, viewport] of Object.entries(VIEWPORTS)) {
   test.describe(`${name} ${viewport.width}x${viewport.height}`, () => {
     test.use({ viewport });
 
-    test('AC-9: a decorative CSS layer with the cave artwork covers the viewport', async ({ page }) => {
+    test('TC-109 (AC-9): a decorative CSS layer with the cave artwork covers the viewport', async ({ page }) => {
       const artwork = page.waitForResponse((response) => response.url().endsWith('/bg-cave.webp'));
       await page.goto('/');
       expect((await artwork).status()).toBe(200);
@@ -63,7 +63,7 @@ for (const [name, viewport] of Object.entries(VIEWPORTS)) {
       await expect(page.locator('img[src*="bg-cave"]')).toHaveCount(0);
     });
 
-    test('AC-10: the background layer stays fixed while scrolling to the middle and the bottom', async ({ page }) => {
+    test('TC-110 (AC-10): the background layer stays fixed while scrolling to the middle and the bottom', async ({ page }) => {
       await page.goto('/');
       const height = await page.evaluate(() => document.documentElement.scrollHeight);
       for (const y of [height / 2, height]) {
@@ -75,7 +75,7 @@ for (const [name, viewport] of Object.entries(VIEWPORTS)) {
       }
     });
 
-    test('AC-13: no axe color-contrast violations with the artwork loaded', async ({ page }) => {
+    test('TC-113 (AC-13): no axe color-contrast violations with the artwork loaded', async ({ page }) => {
       await page.goto('/');
       await waitForArtwork(page);
       expect(await contrastViolations(page)).toEqual([]);
@@ -83,7 +83,7 @@ for (const [name, viewport] of Object.entries(VIEWPORTS)) {
   });
 }
 
-test('AC-11: without the artwork the page falls back to --bg and the quiz works end to end', async ({ page }) => {
+test('TC-111 (AC-11): without the artwork the page falls back to --bg and the quiz works end to end', async ({ page }) => {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => {
@@ -102,7 +102,7 @@ test('AC-11: without the artwork the page falls back to --bg and the quiz works 
   expect(errors).toEqual([]);
 });
 
-test('AC-12: the built artwork is a WebP of at most 300 KB and is not inlined', () => {
+test('TC-112 (AC-12): the built artwork is a WebP of at most 300 KB and is not inlined', () => {
   const file = new URL('../../dist/bg-cave.webp', import.meta.url);
   const bytes = readFileSync(file);
   expect(bytes.subarray(0, 4).toString('ascii')).toBe('RIFF');
@@ -114,7 +114,7 @@ test('AC-12: the built artwork is a WebP of at most 300 KB and is not inlined', 
   expect(html).toContain("url('./bg-cave.webp')");
 });
 
-test('AC-14: sections and panels are translucent, header and sticky bar keep the §5 values', async ({ page }) => {
+test('TC-114 (AC-14): sections and panels are translucent, header and sticky bar keep the §5 values', async ({ page }) => {
   await page.setViewportSize(VIEWPORTS.mobile);
   await page.goto('/');
   const colors = await page.evaluate(() => {
@@ -137,7 +137,7 @@ test('AC-14: sections and panels are translucent, header and sticky bar keep the
   expect(colors.mobileBar).toBe('rgba(18, 19, 22, 0.97)');
 });
 
-test('AC-15: the quiz modal keeps its opaque §5 colors', async ({ page }) => {
+test('TC-115 (AC-15): the quiz modal keeps its opaque §5 colors', async ({ page }) => {
   await page.goto('/');
   await openQuiz(page);
   const colors = await page.evaluate(() => ({
@@ -148,7 +148,7 @@ test('AC-15: the quiz modal keeps its opaque §5 colors', async ({ page }) => {
   expect(colors).toEqual({ backdrop: 'rgba(4, 4, 6, 0.78)', frame: 'rgb(5, 5, 6)', screen: 'rgb(23, 24, 28)' });
 });
 
-test('AC-16: no horizontal scroll and the background covers the viewport at every breakpoint', async ({ page }) => {
+test('TC-116 (AC-16): no horizontal scroll and the background covers the viewport at every breakpoint', async ({ page }) => {
   await page.goto('/');
   const sizes = [[320, 800], [390, 844], [620, 900], [621, 900], [900, 900], [901, 900], [1280, 800], [1920, 1080]];
   for (const [width, height] of sizes) {
@@ -178,7 +178,7 @@ test('AC-16: no horizontal scroll and the background covers the viewport at ever
 test.describe('reduced motion', () => {
   test.use({ reducedMotion: 'reduce' });
 
-  test('AC-17: the background has no animation or transition', async ({ page }) => {
+  test('TC-117 (AC-17): the background has no animation or transition', async ({ page }) => {
     await page.goto('/');
     const layer = await backgroundLayer(page);
     expect(layer.animation).toBe('none');

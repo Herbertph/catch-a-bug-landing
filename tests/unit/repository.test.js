@@ -7,7 +7,7 @@ const files = (dir) =>
     entry.isDirectory() ? files(join(dir, entry.name)) : [join(dir, entry.name)],
   );
 
-describe('AC-19: lead capture, checkout and privacy page are gone', () => {
+describe('TC-119 (AC-19): lead capture, checkout and privacy page are gone', () => {
   it('has no lead, checkout or privacy modules and no privacy build config', () => {
     for (const file of ['src/lead.js', 'src/checkout.js', 'src/privacy.js', 'vite.privacy.config.js']) {
       expect(existsSync(file), file).toBe(false);

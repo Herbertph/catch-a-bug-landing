@@ -27,12 +27,12 @@ const expectNoForbidden = async (page, where) => {
   for (const term of FORBIDDEN) expect(content, `${term} on ${where}`).not.toContain(term.toLowerCase());
 };
 
-test('AC-1: the build emits index.html and no privacy page', () => {
+test('TC-101 (AC-1): the build emits index.html and no privacy page', () => {
   expect(existsSync('dist/index.html')).toBe(true);
   expect(readdirSync('dist')).not.toContain('privacidade.html');
 });
 
-test('AC-2: no offer, price, checkout, privacy or MailerLite text on the page or any quiz screen', async ({ page }) => {
+test('TC-102 (AC-2): no offer, price, checkout, privacy or MailerLite text on the page or any quiz screen', async ({ page }) => {
   await page.goto('/');
   await expectNoForbidden(page, 'page');
 
@@ -49,7 +49,7 @@ test('AC-2: no offer, price, checkout, privacy or MailerLite text on the page or
   await expectNoForbidden(page, 'result screen');
 });
 
-test('AC-3: FAQ item 3 has the PDF question and answer', async ({ page }) => {
+test('TC-103 (AC-3): FAQ item 3 has the PDF question and answer', async ({ page }) => {
   await page.goto('/');
   const trigger = page.getByRole('button', { name: 'Quando o curso lança e quanto vai custar?' });
   await trigger.click();
@@ -59,7 +59,7 @@ test('AC-3: FAQ item 3 has the PDF question and answer', async ({ page }) => {
   );
 });
 
-test('AC-4: the footer has the PDF texts and no link', async ({ page }) => {
+test('TC-104 (AC-4): the footer has the PDF texts and no link', async ({ page }) => {
   await page.goto('/');
   const footer = page.locator('footer');
   await expect(footer.locator('p').first()).toHaveText('UNFLAKY, Quality Lab, Herbert Parasio');
@@ -70,7 +70,7 @@ test('AC-4: the footer has the PDF texts and no link', async ({ page }) => {
   await expect(footer.locator('a')).toHaveCount(0);
 });
 
-test('AC-5: the e-mail screen shows only the note below the form', async ({ page }) => {
+test('TC-105 (AC-5): the e-mail screen shows only the note below the form', async ({ page }) => {
   await page.goto('/');
   await reachEmail(page);
   const form = page.locator('.phone-screen form');
@@ -83,7 +83,7 @@ test('AC-5: the e-mail screen shows only the note below the form', async ({ page
   await expect(page.locator('.phone-screen a')).toHaveCount(0);
 });
 
-test('AC-6: submitting a valid e-mail makes no network request and shows the result at once', async ({ page }) => {
+test('TC-106 (AC-6): submitting a valid e-mail makes no network request and shows the result at once', async ({ page }) => {
   await page.goto('/');
   await reachEmail(page);
   await fillEmail(page, 'ana@site.com');
@@ -96,7 +96,7 @@ test('AC-6: submitting a valid e-mail makes no network request and shows the res
   expect(requests).toEqual([]);
 });
 
-test('AC-7: the only gold button on the result is "Ver as aulas do curso", redo is ghost', async ({ page }) => {
+test('TC-107 (AC-7): the only gold button on the result is "Ver as aulas do curso", redo is ghost', async ({ page }) => {
   await page.goto('/');
   await reachResult(page, Array(7).fill(2));
 
@@ -107,7 +107,7 @@ test('AC-7: the only gold button on the result is "Ver as aulas do curso", redo 
   await expect(page.locator('#oferta')).toHaveCount(0);
 });
 
-test('AC-8: #aulas ends with the 3 curriculum footer items and no price or purchase link', async ({ page }) => {
+test('TC-108 (AC-8): #aulas ends with the 3 curriculum footer items and no price or purchase link', async ({ page }) => {
   await page.goto('/');
   const lessons = page.locator('#aulas');
   await expect(lessons.locator('.course-foot li')).toHaveText([
