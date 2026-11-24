@@ -2,18 +2,20 @@
 
 https://drive.google.com/file/d/1jO2r9agtZciTZsUcOzhwfUsLu5lByXTf/view?usp=drivesdk
 
-Landing page "Teste Antes de Lançar" for the Unflaky mini course, with the 7-question diagnostic quiz in a
-phone-shaped modal. Redesign of `curso-qa` (imported at `5b45243`) with Herbert's cave artwork as the background. Built with a multi-agent pipeline: requirements analyst → developer → tester → pull request.
+English landing page for "Don't Break in Public", a series of 7 ebooks by Unflaky, with the 7-question diagnostic
+quiz in a phone-shaped modal. Redesign of `curso-qa` (imported at `5b45243`) with Herbert's cave artwork as the background. Built with a multi-agent pipeline: requirements analyst → developer → tester → pull request.
 A human reviews and merges every PR.
 
 ## The rule: follow the PDF
 
-The page must follow the current PDF, transcribed verbatim in `docs/reference/landing-page-source-pt-br.md` (§N).
-Copy and behavior come from there, letter by letter. No lead capture, no offer, no price, no checkout and no privacy
+The page is in English only. Every text comes letter by letter from `docs/reference/landing-copy-en.md` (EN-§N),
+with the straight apostrophe `'` and no em or en dash. Structure, layout, measurements, colors and behavior still
+follow the PDF, transcribed in `docs/reference/landing-page-source-pt-br.md` (§N). No lead capture, no offer, no price, no checkout and no privacy
 page: the e-mail is only validated and shown, and no network request is made on submit. Anything the PDF does not
 have needs a spec first. The phrase "Catch a bug" never appears on the page (the repository name is internal).
-Baseline spec, still valid: `docs/reference/baseline-spec-curso-qa.md` (B-AC-n). Current spec:
-`docs/specs/landing-redesign.md`.
+Baseline spec, still valid: `docs/reference/baseline-spec-curso-qa.md` (B-AC-n). Specs:
+`docs/specs/landing-redesign.md` and `docs/specs/english-ebooks.md` (current). Anchors: `#top`, `#diagnostic`,
+`#ebooks`.
 
 ## Stack
 
@@ -43,9 +45,9 @@ First local end-to-end run needs the browser: `npx playwright install chromium`.
 
 ## Structure
 
-- `index.html`: all static markup and copy, including the quiz block inside `#diagnostico` and the modal shell.
+- `index.html`: all static markup and copy, including the quiz block inside `#diagnostic` and the modal shell.
 - `src/styles.css`: design tokens and all styles.
-- `src/quiz-data.js`: the 7 areas, the 3 options, the 3 bands and every quiz/result string (single source of copy).
+- `src/quiz-data.js`: the 7 areas (each with its ebook number), the 3 options, the 3 bands and every quiz/result string (single source of copy).
 - `src/scoring.js`: pure functions (`totalScore`, `bandFor`, `statusFor`, `priorityAreas`, `formatPriorityList`,
   `isValidEmail`, `pointsFor`), no DOM.
 - `src/quiz.js`: quiz state machine and screen rendering (all text via `textContent`).
