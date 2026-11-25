@@ -6,7 +6,7 @@ const ENDPOINT = 'https://assets.mailerlite.com/jsonp/100200/forms/300400/subscr
 // Answer indexes: 0 gives 2 points, 1 gives 1 point, 2 gives 0 points.
 const MIXED = [0, 1, 2, 0, 1, 2, 0];
 
-test('AC-1: a valid submit sends exactly one lead with email, score, band and open areas', async ({ page }) => {
+test('TC-301 (AC-1): a valid submit sends exactly one lead with email, score, band and open areas', async ({ page }) => {
   await useConfig(page);
   const requests = await mockMailerLite(page);
   await page.goto('/');
@@ -25,7 +25,7 @@ test('AC-1: a valid submit sends exactly one lead with email, score, band and op
   expect(body.get('anticsrf')).toBe('true');
 });
 
-test('AC-2: all first options send 14, the top band and no open areas', async ({ page }) => {
+test('TC-302 (AC-2): all first options send 14, the top band and no open areas', async ({ page }) => {
   await useConfig(page);
   const requests = await mockMailerLite(page);
   await page.goto('/');
@@ -38,7 +38,7 @@ test('AC-2: all first options send 14, the top band and no open areas', async ({
   expect(body.get('fields[quiz_open_areas]')).toBe('');
 });
 
-test('AC-2: all last options send 0, the risk band and the 7 areas in ebook order', async ({ page }) => {
+test('TC-302 (AC-2): all last options send 0, the risk band and the 7 areas in ebook order', async ({ page }) => {
   await useConfig(page);
   const requests = await mockMailerLite(page);
   await page.goto('/');
@@ -53,7 +53,7 @@ test('AC-2: all last options send 0, the risk band and the 7 areas in ebook orde
   );
 });
 
-test('AC-3: an invalid email sends nothing', async ({ page }) => {
+test('TC-303 (AC-3): an invalid email sends nothing', async ({ page }) => {
   await useConfig(page);
   const requests = await mockMailerLite(page);
   await page.goto('/');
@@ -72,7 +72,7 @@ for (const [name, options] of [
   ['an aborted request', { abort: true }],
   ['a request that hangs', { hang: true }],
 ]) {
-  test(`AC-4: with ${name}, the result shows at once and page code logs no error`, async ({ page }) => {
+  test(`TC-304 (AC-4): with ${name}, the result shows at once and page code logs no error`, async ({ page }) => {
     const errors = [];
     page.on('console', (message) => {
       if (message.type() === 'error' && !/Failed to load resource/.test(message.text())) errors.push(message.text());
@@ -94,7 +94,7 @@ for (const [name, options] of [
   });
 }
 
-test('AC-5: with the committed empty config, a valid submit makes no request', async ({ page }) => {
+test('TC-305 (AC-5): with the committed empty config, a valid submit makes no request', async ({ page }) => {
   const requests = await mockMailerLite(page);
   await page.goto('/');
   await reachEmail(page);
@@ -108,7 +108,7 @@ test('AC-5: with the committed empty config, a valid submit makes no request', a
   expect(all).toEqual([]);
 });
 
-test('AC-8: the consent notice and privacy link sit above the note on the email screen', async ({ page }) => {
+test('TC-308 (AC-8): the consent notice and privacy link sit above the note on the email screen', async ({ page }) => {
   await page.goto('/');
   await reachEmail(page);
 

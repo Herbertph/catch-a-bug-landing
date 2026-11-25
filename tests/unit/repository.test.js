@@ -19,7 +19,7 @@ describe('repository guard', () => {
     expect(existsSync('src/checkout.js')).toBe(false);
   });
 
-  it('AC-6: no MailerLite API key or token in the source, the build or the repository', () => {
+  it('TC-306 (AC-6): no MailerLite API key or token in the source, the build or the repository', () => {
     // docs/ is skipped because the specs name these patterns to forbid them.
     const all = files('.').filter((path) => isText(path) && path !== SELF);
     for (const path of all) {

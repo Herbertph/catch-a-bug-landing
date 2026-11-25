@@ -107,7 +107,7 @@ describe('isValidEmail', () => {
 });
 
 describe('buildLead', () => {
-  it('AC-7: trims the email and returns score, band and open areas for mixed answers', () => {
+  it('TC-307 (AC-7): trims the email and returns score, band and open areas for mixed answers', () => {
     expect(buildLead('  ana@site.com  ', [2, 1, 0, 2, 1, 0, 2])).toEqual({
       email: 'ana@site.com',
       quiz_score: 8,
@@ -116,7 +116,7 @@ describe('buildLead', () => {
     });
   });
 
-  it('AC-7: all 2 points give 14, the top band and no open areas', () => {
+  it('TC-307 (AC-7): all 2 points give 14, the top band and no open areas', () => {
     expect(buildLead('ana@site.com', Array(7).fill(2))).toMatchObject({
       quiz_score: 14,
       quiz_band: 'Almost ready, close the gaps',
@@ -124,7 +124,7 @@ describe('buildLead', () => {
     });
   });
 
-  it('AC-7: all 0 points give 0, the risk band and the 7 areas in ebook order', () => {
+  it('TC-307 (AC-7): all 0 points give 0, the risk band and the 7 areas in ebook order', () => {
     expect(buildLead('ana@site.com', Array(7).fill(0))).toMatchObject({
       quiz_score: 0,
       quiz_band: 'Launch at risk',

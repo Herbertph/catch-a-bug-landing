@@ -35,7 +35,7 @@ const FOOTER_LINKS = [
 
 const ALL_PAGES = ['/', ...PAGES.map(([file]) => `/${file}`)];
 
-test('AC-9: dist has the four pages and the background image, and each loads cleanly', async ({ page }) => {
+test('TC-309 (AC-9): dist has the four pages and the background image, and each loads cleanly', async ({ page }) => {
   for (const file of ['index.html', 'privacy.html', 'terms.html', 'refund.html', 'bg-cave.webp']) {
     expect(existsSync(`dist/${file}`), file).toBe(true);
   }
@@ -61,7 +61,7 @@ test('AC-9: dist has the four pages and the background image, and each loads cle
 });
 
 for (const [file, copy] of PAGES) {
-  test(`AC-10: ${file} has the exact LEGAL copy, mailto links and links back to the landing page`, async ({ page }) => {
+  test(`TC-310 (AC-10): ${file} has the exact LEGAL copy, mailto links and links back to the landing page`, async ({ page }) => {
     await page.goto(`/${file}`);
 
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
@@ -87,7 +87,7 @@ for (const [file, copy] of PAGES) {
 }
 
 for (const path of ALL_PAGES) {
-  test(`AC-11: the footer of ${path} links to the three legal pages`, async ({ page }) => {
+  test(`TC-311 (AC-11): the footer of ${path} links to the three legal pages`, async ({ page }) => {
     for (const [name, href, title] of FOOTER_LINKS) {
       await page.goto(path);
       const link = page.locator('.site-footer').getByRole('link', { name, exact: true });
@@ -112,7 +112,7 @@ const expectClean = async (page, where) => {
   expect(dollars, where).not.toContain('$');
 };
 
-test('AC-12: no dashes, curly apostrophes, waitlist wording or prices on any page or quiz screen', async ({ page }) => {
+test('TC-312 (AC-12): no dashes, curly apostrophes, waitlist wording or prices on any page or quiz screen', async ({ page }) => {
   for (const path of ALL_PAGES) {
     await page.goto(path);
     await expectClean(page, path);

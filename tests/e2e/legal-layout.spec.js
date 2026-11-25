@@ -18,7 +18,7 @@ async function axeContrast(page, include) {
 
 for (const width of WIDTHS) {
   for (const path of PAGES) {
-    test(`AC-13: ${path} at ${width}px has no horizontal scroll and every text reaches WCAG AA`, async ({ page }) => {
+    test(`TC-313 (AC-13): ${path} at ${width}px has no horizontal scroll and every text reaches WCAG AA`, async ({ page }) => {
       test.setTimeout(120_000);
       await page.setViewportSize({ width, height: 800 });
       await page.goto(`/${path}`);
@@ -30,7 +30,7 @@ for (const width of WIDTHS) {
     });
   }
 
-  test(`AC-13: the email screen with the consent notice at ${width}px fits and passes contrast`, async ({ page }) => {
+  test(`TC-313 (AC-13): the email screen with the consent notice at ${width}px fits and passes contrast`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 });
     await page.goto('/');
     await reachEmail(page);
