@@ -38,7 +38,7 @@ test('TC-38 (AC-25): every invalid e-mail shows the exact error, focuses the fie
     await expect(error, `error for ${JSON.stringify(value)}`).toBeVisible();
     await expect(error).toHaveText(ERROR);
     await expect(field).toBeFocused();
-    await expect(page.getByText('YOUR DIAGNOSTIC')).toHaveCount(0);
+    await expect(page.getByText('YOUR DIAGNOSTIC', { exact: true })).toHaveCount(0);
   }
 });
 
@@ -54,7 +54,7 @@ test('TC-39 (AC-26): a valid e-mail clears the error and shows the result immedi
   await page.getByRole('button', { name: 'Show my diagnostic' }).click();
 
   await expect(page.locator('.email-error')).toHaveCount(0);
-  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC', { exact: true })).toBeVisible();
   await expect(page.locator('.quiz-email')).toHaveText('ana@site.com');
 });
 
@@ -74,7 +74,7 @@ test('TC-41 (AC-27): the e-mail is never sent over the network', async ({ page }
   await reachEmail(page);
   await fillEmail(page, 'ana@site.com');
   await page.getByRole('button', { name: 'Show my diagnostic' }).click();
-  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC', { exact: true })).toBeVisible();
 
   expect(requests.filter((request) => request.includes('ana@site.com'))).toEqual([]);
 });
@@ -85,7 +85,7 @@ test('TC-42 (AC-27): e-mail markup is rendered as text, not HTML', async ({ page
 
   await submitEmail(page, '<b>x</b>@a.bc');
 
-  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC', { exact: true })).toBeVisible();
   await expect(page.locator('.quiz-email')).toHaveText('<b>x</b>@a.bc');
   await expect(page.locator('.quiz-email *')).toHaveCount(0);
 });

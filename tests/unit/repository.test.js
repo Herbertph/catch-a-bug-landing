@@ -2,23 +2,28 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const files = (dir) =>
-  readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
-    entry.isDirectory() ? files(join(dir, entry.name)) : [join(dir, entry.name)],
-  );
+const SKIP = new Set(['node_modules', '.git', 'docs', 'test-results', 'playwright-report']);
+const SELF = join('tests', 'unit', 'repository.test.js');
 
-describe('TC-119 (AC-19): lead capture, checkout and privacy page are gone', () => {
-  it('has no lead, checkout or privacy modules and no privacy build config', () => {
-    for (const file of ['src/lead.js', 'src/checkout.js', 'src/privacy.js', 'vite.privacy.config.js']) {
-      expect(existsSync(file), file).toBe(false);
-    }
+const files = (dir) =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    if (SKIP.has(entry.name)) return [];
+    const path = join(dir, entry.name);
+    return entry.isDirectory() ? files(path) : [path];
   });
 
-  it('has no test that references MailerLite, the checkout or the privacy page', () => {
-    // These two files assert the absence of those terms, so they name them.
-    const guards = [join('tests', 'unit', 'repository.test.js'), join('tests', 'e2e', 'pdf-restore.spec.js')];
-    for (const file of files('tests').filter((name) => !guards.includes(name))) {
-      expect(readFileSync(file, 'utf8'), file).not.toMatch(/mailerlite|checkout\.js|CHECKOUT_URL|privacidade|privacy/i);
+const isText = (path) => /\.(js|json|html|css|md|yml)$/.test(path);
+
+describe('repository guard', () => {
+  it('has no checkout module yet (Paddle comes in its own spec)', () => {
+    expect(existsSync('src/checkout.js')).toBe(false);
+  });
+
+  it('TC-306 (AC-6): no MailerLite API key or token in the source, the build or the repository', () => {
+    // docs/ is skipped because the specs name these patterns to forbid them.
+    const all = files('.').filter((path) => isText(path) && path !== SELF);
+    for (const path of all) {
+      expect(readFileSync(path, 'utf8'), path).not.toMatch(/api_key|apiKey|Bearer|connect\.mailerlite\.com\/api/);
     }
   });
 });

@@ -166,7 +166,7 @@ test('TC-34 (AC-22): question 7 reads "Ver o que falta" and leads to the e-mail 
   await next.click();
 
   await expect(page.getByLabel('Your email to see the diagnostic')).toBeVisible();
-  await expect(page.getByText('YOUR DIAGNOSTIC')).toHaveCount(0);
+  await expect(page.getByText('YOUR DIAGNOSTIC', { exact: true })).toHaveCount(0);
 });
 
 test('TC-35 (AC-23): the phone screen scrolls back to the top on every screen change', async ({ page }) => {
@@ -214,6 +214,6 @@ test('TC-36 (AC-23): the phone screen scrolls back to the top on the e-mail and 
 
   await page.getByLabel('Your email to see the diagnostic').fill('ana@site.com');
   await page.getByRole('button', { name: 'Show my diagnostic' }).click();
-  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC', { exact: true })).toBeVisible();
   expect(await screen.evaluate((el) => el.scrollTop)).toBe(0);
 });

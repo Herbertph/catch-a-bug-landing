@@ -1,3 +1,4 @@
+import { sendLead } from './lead.js';
 import { AREAS, EMAIL_COPY, OPTIONS, QUESTIONS_COPY, RESULT_COPY } from './quiz-data.js';
 import {
   bandFor,
@@ -167,9 +168,17 @@ export function createQuiz(root, { onSeeEbooks } = {}) {
       state.email = input.value;
       state.step = 'result';
       render();
+      sendLead(state.email, state.answers);
     });
 
-    panel.append(form, el('p', 'email-note', EMAIL_COPY.note));
+    const consent = el('p', 'email-consent');
+    const privacyLink = el('a', 'privacy-link', EMAIL_COPY.privacyLink);
+    privacyLink.href = 'privacy.html';
+    privacyLink.target = '_blank';
+    privacyLink.rel = 'noopener';
+    consent.append(document.createTextNode(`${EMAIL_COPY.consent} `), privacyLink);
+
+    panel.append(form, consent, el('p', 'email-note', EMAIL_COPY.note));
     fragment.append(panel);
     root.replaceChildren(fragment);
     scrollScreenToTop();

@@ -33,7 +33,7 @@ const expectNoForbidden = async (page, where) => {
   for (const term of FORBIDDEN) expect(content, `${term} on ${where}`).not.toContain(term.toLowerCase());
 };
 
-test('TC-101 (AC-1): the build emits index.html and no privacy page', () => {
+test('TC-101 (AC-1): the build emits index.html and no pt-BR privacy page', () => {
   expect(existsSync('dist/index.html')).toBe(true);
   expect(readdirSync('dist')).not.toContain('privacidade.html');
 });
@@ -51,7 +51,7 @@ test('TC-102 (AC-2): no offer, price, checkout, privacy or MailerLite text on th
 
   await fillEmail(page, 'ana@site.com');
   await page.getByRole('button', { name: 'Show my diagnostic' }).click();
-  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC', { exact: true })).toBeVisible();
   await expectNoForbidden(page, 'result screen');
 });
 
@@ -65,7 +65,7 @@ test('TC-103 (AC-3): FAQ item 3 has the PDF question and answer', async ({ page 
   );
 });
 
-test('TC-104 (AC-4): the footer has the PDF texts and no link', async ({ page }) => {
+test('TC-104 (AC-4, lead-capture AC-11): the footer has the PDF texts and only the three legal links', async ({ page }) => {
   await page.goto('/');
   const footer = page.locator('footer');
   await expect(footer.locator('p').first()).toHaveText('UNFLAKY, Quality Lab, Herbert Parasio');
@@ -73,10 +73,10 @@ test('TC-104 (AC-4): the footer has the PDF texts and no link', async ({ page })
     'Ebook series in production. Content based on real QA experience, with no financial results promised or invented.',
     { useInnerText: true },
   );
-  await expect(footer.locator('a')).toHaveCount(0);
+  await expect(footer.locator('a')).toHaveText(['Terms of service', 'Refund policy', 'Privacy policy']);
 });
 
-test('TC-105 (AC-5): the e-mail screen shows only the note below the form', async ({ page }) => {
+test('TC-105 (AC-5, lead-capture AC-8): below the form there are only the consent notice and the note', async ({ page }) => {
   await page.goto('/');
   await reachEmail(page);
   const form = page.locator('.phone-screen form');
@@ -85,11 +85,14 @@ test('TC-105 (AC-5): the e-mail screen shows only the note below the form', asyn
     for (let node = el.nextElementSibling; node; node = node.nextElementSibling) texts.push(node.textContent.trim());
     return texts;
   });
-  expect(after).toEqual(['Your result appears on screen as soon as you confirm.']);
-  await expect(page.locator('.phone-screen a')).toHaveCount(0);
+  expect(after).toEqual([
+    'By continuing, you agree to receive emails from Unflaky about your diagnostic and the ebooks. You can unsubscribe at any time. Privacy policy',
+    'Your result appears on screen as soon as you confirm.',
+  ]);
+  await expect(page.locator('.phone-screen a')).toHaveCount(1);
 });
 
-test('TC-106 (AC-6): submitting a valid e-mail makes no network request and shows the result at once', async ({ page }) => {
+test('TC-106 (AC-6, lead-capture AC-5): with the committed empty config, a valid e-mail makes no network request and shows the result at once', async ({ page }) => {
   await page.goto('/');
   await reachEmail(page);
   await fillEmail(page, 'ana@site.com');
@@ -97,7 +100,7 @@ test('TC-106 (AC-6): submitting a valid e-mail makes no network request and show
   const requests = [];
   page.on('request', (request) => requests.push(request.url()));
   await page.getByRole('button', { name: 'Show my diagnostic' }).click();
-  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible({ timeout: 1000 });
+  await expect(page.getByText('YOUR DIAGNOSTIC', { exact: true })).toBeVisible({ timeout: 1000 });
 
   expect(requests).toEqual([]);
 });

@@ -86,7 +86,7 @@ test('TC-206 (AC-6): an invalid email shows the EN error and a valid one shows t
   page.on('request', (request) => requests.push(request.url()));
   await fillEmail(page, 'ana@site.com');
   await page.getByRole('button', { name: 'Show my diagnostic' }).click();
-  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible({ timeout: 1000 });
+  await expect(page.getByText('YOUR DIAGNOSTIC', { exact: true })).toBeVisible({ timeout: 1000 });
   expect(requests).toEqual([]);
 });
 
