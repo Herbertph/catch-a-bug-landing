@@ -10,17 +10,22 @@ A human reviews and merges every PR.
 
 The page is in English only. Every text comes letter by letter from `docs/reference/landing-copy-en.md` (EN-§N),
 with the straight apostrophe `'` and no em or en dash. Structure, layout, measurements, colors and behavior still
-follow the PDF, transcribed in `docs/reference/landing-page-source-pt-br.md` (§N). No lead capture, no offer, no price, no checkout and no privacy
-page: the e-mail is only validated and shown, and no network request is made on submit. Anything the PDF does not
-have needs a spec first. The phrase "Catch a bug" never appears on the page (the repository name is internal).
+follow the PDF, transcribed in `docs/reference/landing-page-source-pt-br.md` (§N). Legal page copy and the consent notice come letter by letter from
+`docs/reference/legal-copy-en.md` (LEGAL-§N). A valid email submit sends the lead to MailerLite (see below) and the
+result never waits for it. `privacy.html`, `terms.html` and `refund.html` are linked from every footer. Still no
+price, offer or checkout until the Paddle spec. `herbert.parasio@gmail.com` appears only on the legal pages.
+Anything the PDF does not have needs a spec first. The phrase "Catch a bug" never appears on the page (the repository name is internal).
 Baseline spec, still valid: `docs/reference/baseline-spec-curso-qa.md` (B-AC-n). Specs:
-`docs/specs/landing-redesign.md` and `docs/specs/english-ebooks.md` (current). Anchors: `#top`, `#diagnostic`,
+`docs/specs/landing-redesign.md`, `docs/specs/english-ebooks.md` and `docs/specs/lead-capture-and-legal.md`
+(current). Anchors: `#top`, `#diagnostic`,
 `#ebooks`.
 
 ## Stack
 
 - **Vite 8 + vanilla JavaScript (ES modules)**, no framework.
-- **`vite-plugin-singlefile`**: `npm run build` emits one self-contained `dist/index.html` with CSS and JS inlined.
+- **`vite-plugin-singlefile`**: `npm run build` (`scripts/build.js`) runs one Vite build per page and emits
+  self-contained `dist/index.html`, `privacy.html`, `terms.html` and `refund.html` with CSS and JS inlined, plus
+  `dist/bg-cave.webp`. One build per page, because the plugin cannot inline a chunk shared by several entries.
   Fonts stay on Google Fonts (Archivo and IBM Plex Mono).
 - **Vitest** for unit tests of the pure logic (`tests/unit`).
 - **Playwright** (Chromium) for end-to-end tests, with two projects: `desktop` (1280×800) and `mobile` (390×844).
@@ -34,7 +39,7 @@ Baseline spec, still valid: `docs/reference/baseline-spec-curso-qa.md` (B-AC-n).
 | --- | --- |
 | `npm install` | install dependencies |
 | `npm run dev` | Vite dev server |
-| `npm run build` | build the single-file `dist/index.html` |
+| `npm run build` | build the four single-file pages into `dist/` |
 | `npm run preview` | preview the built file (Vite default port 4173) |
 | `npm run serve:e2e` | preview the built file on `127.0.0.1:4173` for Playwright |
 | `npm test` | run Vitest unit tests |
@@ -54,6 +59,10 @@ First local end-to-end run needs the browser: `npx playwright install chromium`.
 - `src/modal.js`: modal open/close, focus, scroll lock and the three close methods.
 - `src/accordion.js`: course and FAQ accordions (one open at a time, `aria-expanded` in sync).
 - `src/main.js`: moves the quiz into the phone screen and wires every `[data-open-quiz]` button.
+- `src/config.js`: public MailerLite account and form IDs (empty in the repository).
+- `src/lead.js`: fire-and-forget MailerLite subscribe request (`sendLead`), 8 s timeout, silent on failure.
+- `privacy.html`, `terms.html`, `refund.html`: static legal pages; `src/legal.js` only loads the styles.
+- `scripts/build.js`: one single-file Vite build per page.
 - `tests/unit/`: Vitest tests (scoring, quiz copy, design tokens, repository guard).
 - `tests/e2e/`: Playwright acceptance tests, named after their AC-n.
 - `docs/reference/`: PDF transcription, baseline spec and the original cave artwork (PNG).
@@ -62,6 +71,23 @@ First local end-to-end run needs the browser: `npx playwright install chromium`.
 - `docs/test-reports/`: test reports written by the tester.
 - Bugs found in testing are filed as GitHub issues labeled `bug` and `severity: *`. Fix commits reference the issue
   (`fix: ... (#12)`), and PRs close them with `Fixes #12`.
+
+## Lead capture (MailerLite)
+
+- On a valid submit, `src/quiz.js` shows the result, then calls `sendLead(email, answers)`. The lead comes from the
+  pure `buildLead` in `src/scoring.js`: `email` (trimmed), `quiz_score` (0 to 14), `quiz_band` (band title) and
+  `quiz_open_areas` (areas below 2 points, in ebook order, joined by `, `).
+- Request: `POST https://assets.mailerlite.com/jsonp/<ACCOUNT_ID>/forms/<FORM_ID>/subscribe`, `mode: 'no-cors'`,
+  form-urlencoded, with `fields[email]`, `fields[quiz_score]`, `fields[quiz_band]`, `fields[quiz_open_areas]`,
+  `ml-submit=1` and `anticsrf=true` (MailerLite's public embedded-form endpoint, same as `curso-qa`).
+- `src/config.js` holds `MAILERLITE_ACCOUNT_ID` and `MAILERLITE_FORM_ID`, public IDs from the embed code. While
+  either is empty, nothing is sent. Never put an API key or token in the page or the repository
+  (`tests/unit/repository.test.js` guards it).
+- Tests: `useConfig(page)` in `tests/e2e/helpers.js` sets `window.__TEST_CONFIG__` before the page loads, and
+  `mockMailerLite(page)` intercepts the endpoint. Tests never call the real service.
+- Setup for Herbert in MailerLite: create the custom fields `quiz_score` (number), `quiz_band` (text) and
+  `quiz_open_areas` (text); create an embedded form linked to a group, with those fields and double opt-in on; send
+  the embed code so the account ID and form ID go into `src/config.js`.
 
 ## Design system (FR-16): 8px grid and Refactoring UI
 
