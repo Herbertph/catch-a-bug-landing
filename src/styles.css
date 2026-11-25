@@ -1281,7 +1281,7 @@ p {
 .email-note {
   margin: var(--space-3) 0 0;
   font-size: var(--font-xs);
-  color: var(--muted2);
+  color: var(--muted);
 }
 
 /* Result screen */
