@@ -255,7 +255,7 @@ test('TC-6 (AC-3): no em dash or en dash in the rendered page, attributes or qui
   }
   await page.getByLabel('Your email to see the diagnostic').fill('ana@site.com');
   await page.getByRole('button', { name: 'Show my diagnostic' }).click();
-  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC', { exact: true })).toBeVisible();
   const resultHtml = await page.evaluate(() => document.documentElement.outerHTML);
   expect(resultHtml).not.toMatch(/[\u2013\u2014]/);
 });
@@ -405,7 +405,7 @@ test('TC-61 (AC-41): computed padding, margin and gap values belong to the spaci
   }
   await page.getByLabel('Your email to see the diagnostic').fill('ana@site.com');
   await page.getByRole('button', { name: 'Show my diagnostic' }).click();
-  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC', { exact: true })).toBeVisible();
 
   const samples = await page.evaluate(() => {
     const selectors = [

@@ -1,5 +1,37 @@
 import { expect } from '@playwright/test';
 
+export const TEST_CONFIG = {
+  MAILERLITE_ACCOUNT_ID: '100200',
+  MAILERLITE_FORM_ID: '300400',
+};
+
+export const MAILERLITE_PATTERN = /https:\/\/assets\.mailerlite\.com\/jsonp\//;
+
+// Must run before page.goto: overrides src/config.js without touching the committed empty defaults.
+export async function useConfig(page, overrides = TEST_CONFIG) {
+  await page.addInitScript((config) => {
+    window.__TEST_CONFIG__ = config;
+  }, overrides);
+}
+
+export async function mockMailerLite(page, { status = 200, abort = false, hang = false } = {}) {
+  const requests = [];
+  await page.route(MAILERLITE_PATTERN, async (route) => {
+    requests.push({ url: route.request().url(), body: route.request().postData() ?? '' });
+    if (hang) return;
+    if (abort) {
+      await route.abort('failed');
+      return;
+    }
+    await route.fulfill({ status, contentType: 'application/json', body: '' });
+  });
+  return requests;
+}
+
+export function parseBody(request) {
+  return new URLSearchParams(request.body);
+}
+
 export const OPTION_LABELS = [
   "Yes, I've really tested this",
   'I only tested the normal path, no errors',
@@ -48,7 +80,7 @@ export async function reachEmail(page, answers = Array(7).fill(0)) {
 export async function reachResult(page, answers = Array(7).fill(0), email = 'ana@site.com') {
   await reachEmail(page, answers);
   await submitEmail(page, email);
-  await expect(page.getByText('YOUR DIAGNOSTIC')).toBeVisible();
+  await expect(page.getByText('YOUR DIAGNOSTIC', { exact: true })).toBeVisible();
 }
 
 export async function closeQuiz(page) {
