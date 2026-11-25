@@ -104,6 +104,9 @@ export const EMAIL_COPY = {
   placeholder: 'your best email',
   button: 'Show my diagnostic',
   note: 'Your result appears on screen as soon as you confirm.',
+  consent:
+    'By continuing, you agree to receive emails from Unflaky about your diagnostic and the ebooks. You can unsubscribe at any time.',
+  privacyLink: 'Privacy policy',
   error: 'Please check the email you typed, something seems to be missing.',
 };
 

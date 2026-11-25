@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  buildLead,
   bandFor,
   formatPriorityList,
   isValidEmail,
@@ -102,5 +103,42 @@ describe('isValidEmail', () => {
     'ana@@site.com',
   ])('rejects %j', (value) => {
     expect(isValidEmail(value)).toBe(false);
+  });
+});
+
+describe('buildLead', () => {
+  it('AC-7: trims the email and returns score, band and open areas for mixed answers', () => {
+    expect(buildLead('  ana@site.com  ', [2, 1, 0, 2, 1, 0, 2])).toEqual({
+      email: 'ana@site.com',
+      quiz_score: 8,
+      quiz_band: 'Partial base, open gaps',
+      quiz_open_areas: 'Payment and checkout, Saving and data loss, Main flow, end to end, Errors and edge cases',
+    });
+  });
+
+  it('AC-7: all 2 points give 14, the top band and no open areas', () => {
+    expect(buildLead('ana@site.com', Array(7).fill(2))).toMatchObject({
+      quiz_score: 14,
+      quiz_band: 'Almost ready, close the gaps',
+      quiz_open_areas: '',
+    });
+  });
+
+  it('AC-7: all 0 points give 0, the risk band and the 7 areas in ebook order', () => {
+    expect(buildLead('ana@site.com', Array(7).fill(0))).toMatchObject({
+      quiz_score: 0,
+      quiz_band: 'Launch at risk',
+      quiz_open_areas:
+        'Login and session, Payment and checkout, Saving and data loss, Permissions and access, Main flow, end to end, Errors and edge cases, Mobile and browsers',
+    });
+  });
+
+  it.each([
+    [[2, 2, 0, 0, 0, 0, 0], 4, 'Launch at risk'],
+    [[2, 2, 1, 0, 0, 0, 0], 5, 'Partial base, open gaps'],
+    [[2, 2, 2, 2, 1, 0, 0], 9, 'Partial base, open gaps'],
+    [[2, 2, 2, 2, 2, 0, 0], 10, 'Almost ready, close the gaps'],
+  ])('AC-7: band boundary %j gives score %i and "%s"', (answers, score, band) => {
+    expect(buildLead('ana@site.com', answers)).toMatchObject({ quiz_score: score, quiz_band: band });
   });
 });
